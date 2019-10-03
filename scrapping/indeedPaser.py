@@ -64,7 +64,7 @@ class IndeedPaser:
                         title = item.find_element_by_xpath(".//*[contains(@class,'jobtitle')]")
                         item_link = title.get_attribute("href")
                         
-                        if (len(self.dataset) == 0) | (item_link not in self.dataset["URL"]):
+                        if (len(self.dataset) == 0) | (True not in self.dataset.isin([item_link])):
                             print("existe pas")
                             title, name, address, date, description = self.indeed_item_parser.parse(item_link)
                             self.dataset.loc[dataset_len + index_i] = [item_link, title, name, address, date,description]
