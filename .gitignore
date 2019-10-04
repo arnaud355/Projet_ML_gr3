@@ -1,3 +1,4 @@
 .config
 *.png
 .ipynb_checkpoints
+*.html
