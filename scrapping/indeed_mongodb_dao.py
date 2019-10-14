@@ -8,13 +8,14 @@ class IndeedMongodbDao:
         self.conn = MongoClient() 
         self.db = self.conn.Indeed
         self.collection = self.db.data
+        self.collection_duplicate_data = self.db.duplicate_data
         
     def _valid_url_format(self,url):
         val = URLValidator()
         try:
             val(url)
-        except:
-            raise Exception('bad format for url {}'.format(url))
+        except ValidationError as e:
+            raise Exception('bad format for url {}'.format(ur))
     
     def insert_data_bulk(self,data):
         try:
@@ -24,11 +25,26 @@ class IndeedMongodbDao:
             print(bwe.details['writeErrors'])
             raise
     
+    
+    def insert_to_dulicate_data(self,url):
+        try:
+            if url == "":
+                raise Exception('url cannot be empty {}'.format(ur))
+
+            self._valid_url_format(url)
+
+            line_to_insert = {"url": url}
+
+            result = self.collection_duplicate_data.insert_one(line_to_insert) 
+        except Exception as e:
+            print(e)
+        
+    
     def insert_data(self, url, title, name, address, publication_date,salaire, description, localisation):
         
         try:
             if url == "":
-                raise Exception('url cannot be empty {}'.format(url))
+                raise Exception('url cannot be empty {}'.format(ur))
 
             self._valid_url_format(url)
 
@@ -53,7 +69,7 @@ class IndeedMongodbDao:
                              }
 
             # Insert Data 
-            self.collection.insert_one(line_to_insert) 
+            result = self.collection.insert_one(line_to_insert) 
         except Exception as e:
             print(e)
     
@@ -67,8 +83,11 @@ class IndeedMongodbDao:
     def url_exist(self, url):
         return self.collection.find({"url" : url}).count() > 0
     
-    def get_all_dupliate(self):
+    def url_exist_on_duplicate_data(self, url):
+        return self.collection_duplicate_data.find({"url" : url}).count() > 0
+    
+    def get_all_duplicate(self):
         return self.collection.aggregate([{"$group" : { "_id": "$url", "count": { "$sum": 1 } }}, {"$match": {"_id" :{ "$ne" : None } , "count" : {"$gt": 1} } }, {"$project": {"u" : "$_id", "_id" : 0}}])
-
+    
     def update_salary(self,id, salaire):
-        self.collection.update_one({'_id': id},{'$set': {'salaire': salaire}, upsert=False)
+        self.collection.update_one({'_id': id},{'$set': {'salaire': salaire}}, upsert=False)
