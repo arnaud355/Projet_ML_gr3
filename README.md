@@ -2,3 +2,10 @@
 
 ## Contextualisation du projet
 
+
+
+## Livrables 
+
+- Dashboard Flask 
+- Présentation métier 
+- Présentation technique
