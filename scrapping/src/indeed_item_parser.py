@@ -5,6 +5,27 @@ from selenium.webdriver.common.by import By
 import numpy as np
 import pandas as pd
 import time
+import re
+from multiprocessing import Pool
+from functools import partial
+from datetime import datetime, timedelta
+import os.path
+import os
+from pymongo import MongoClient 
+import pandas as pd 
+import json
+from pymongo import errors 
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+from pymongo.errors import BulkWriteError
+from tempfile import NamedTemporaryFile
+import string
+import random
+from urllib import request
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+#from yelp_uri.encoding import recode_uri
+import traceback
 
 class IndeedItemParser:
     def __init__(self):

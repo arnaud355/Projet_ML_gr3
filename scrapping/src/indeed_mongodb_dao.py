@@ -3,6 +3,7 @@ from pymongo import errors
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from pymongo.errors import BulkWriteError
+
 class IndeedMongodbDao:
     def __init__(self):
         self.conn = MongoClient() 
@@ -29,7 +30,7 @@ class IndeedMongodbDao:
     def insert_to_dulicate_data(self,url):
         try:
             if url == "":
-                raise Exception('url cannot be empty {}'.format(ur))
+                raise Exception('url cannot be empty {}'.format(url))
 
             self._valid_url_format(url)
 
@@ -44,7 +45,7 @@ class IndeedMongodbDao:
         
         try:
             if url == "":
-                raise Exception('url cannot be empty {}'.format(ur))
+                raise Exception('url cannot be empty {}'.format(url))
 
             self._valid_url_format(url)
 

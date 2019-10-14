@@ -5,8 +5,34 @@ from selenium.webdriver.common.by import By
 import numpy as np
 import pandas as pd
 import time
-
+import re
+from multiprocessing import Pool
+from functools import partial
 from datetime import datetime, timedelta
+import os.path
+import os
+from pymongo import MongoClient 
+import pandas as pd 
+import json
+from pymongo import errors 
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+from pymongo.errors import BulkWriteError
+from tempfile import NamedTemporaryFile
+import string
+import random
+from urllib import request
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+from yelp_uri.encoding import recode_uri
+import traceback
+from datetime import datetime, timedelta
+
+from indeed_item_parser import IndeedItemParser
+from indeed_mongodb_dao import IndeedMongodbDao
+from key_words_provider import KeyWordsProvider
+
+
 class IndeedPaser:
     def __init__(self):
         self.website = "https://www.indeed.fr"
@@ -119,3 +145,6 @@ class IndeedPaser:
                         
                         for index_i, link in enumerate(items):
                             self._local_parse_page(link, location)
+
+parser = IndeedPaser()
+parser.parse()
