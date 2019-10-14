@@ -1,2 +1,4 @@
-# Projet_ML_gr3
-Projet ML data/IA
+# Prédiction du salaire des annonces en fonction des métiers et des villes (indeed)
+
+## Contextualisation du projet
+
