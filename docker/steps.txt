@@ -1,0 +1,50 @@
+- docker-compose build
+- docker run -i -t 7be8230c6e8a /bin/bash : lancer un container à partir d'une image qui tourne
+
+ou
+
+- docker build -t mongo/python . : lancer dockerfile sans passer par docker-compose
+
+- verifier la version linux :
+   cat /etc/os-releas
+- docker exec -t -i container_name /bin/bash : ese logger dans un container déjà lancer
+
+Dans le shell linux :
+- apt update
+- apt -y upgrade
+- apt install -y python3-pip
+- python3 -V : pour voir la version 
+
+Installation des dépendances :
+- se connecter sur le container
+- python -m pip install pymongo
+- python -m pip install pandas
+- python -m pip i
+
+Creation de la base mongodb :
+ - lancer un shell docker et lancer la command : mongod 
+ - lancer un autre shell docker et lancer la command : mongo
+   cela permet d'avoir le terminal et faire des requêtes sur la base mongodb
+ - ouvrir un autre terminal se connecter sur le container en mode bash et exécuter le fichier create_database.py
+
+Commiter l'image docker :
+    - ex: docker commit 06e886401a62 docker_web:version3
+    - avec 06e886401a62 comme étant l'id du container
+    - avec docker_web:version3 comme étant nom:tag de l'image
+
+ Importer et exporter une image docker
+  - faire la commande suivante pour sauvegarder son image docker sur un répertoire windows:
+    * docker save -o C:\Users\utilisateur\Documents\Projet_ML_gr3\docker_images\mongo_server.tar    docker_web:version2
+  - pour charger la nouvelle image dans un autre pc windows :
+    * récupérer l'image qui est au format .tar
+    * docker load -i C:temp\mongo_server.tar (le chemin où on a copié l'image dans un autre pc)
+
+
+Programmer un scheduler pour de scrapping dans le docker :
+ - commencer par installer cron:
+    * apt-get install cron
+ - S'il n'y a pas d'editeur, installer vim:
+    * apt-get install vim
+ - faite :
+    * export EDITOR=vim
+    *

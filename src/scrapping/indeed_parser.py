@@ -1,7 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 import numpy as np
 import pandas as pd
 import time
@@ -47,7 +43,6 @@ class IndeedPaser:
     def _get_pages_counts(self,soup):
         searchCountPages = None
         try:
-            #searchCountPages_elt = driver.find_element_by_id("searchCountPages")
             searchCountPages_elt = soup.select("#searchCountPages")
             if len(searchCountPages_elt) > 0:
                 searchCountPages = searchCountPages_elt[0].text.strip().split()
@@ -82,7 +77,7 @@ class IndeedPaser:
             elif self.dao.url_exist_on_duplicate_data(item_link) == True:
                 print("duplicate url and aready parsed, skip")
             else:
-                title, name, address, date,salaire, description = self.indeed_item_parser.parse(item_link)
+                title, name, address, date,salaire, description, contract_type = self.indeed_item_parser.parse(item_link)
                 if self.dao.description_exist(description) == True:
                     self.dao.insert_to_dulicate_data(item_link)
                     print("duplicate. archived and skip.")
@@ -91,8 +86,8 @@ class IndeedPaser:
                     print("date nan - ", item_link)
                 
                 if (item_link != np.nan) & (title != np.nan) & (name != np.nan) & (address != np.nan) & (description != np.nan):
-                    self.dao.insert_data(item_link,title,name,address,date,salaire,description,localisation)
-                    print("saved :",item_link)   
+                    self.dao.insert_data(item_link, title, name, address, date, salaire, description, localisation, contract_type)
+                    print("saved :", item_link)
                     print(salaire)
                 
                 #self.create_local_file(item_link, source)
@@ -108,9 +103,23 @@ class IndeedPaser:
         source = item_link + "----------------" + source
         file.write(source)
         file.close()
-                    
+
+    def update_data(self):
+        items = self.dao.get_all_data()
+        for index_i, item in enumerate(items):
+            try:
+                #self._local_parse_page(link, location)
+                title, name, address, date, salaire, description, contract_type = self.indeed_item_parser.parse(item["url"])
+                if (item["url"] != np.nan) & (title != np.nan) & (name != np.nan) & (address != np.nan) & (description != np.nan):
+                        self.dao.update_data(item["_id"], item["url"], title, name, address, date, salaire, description, contract_type)
+                        print("updated :", item["url"])
+                        print(salaire)
+            except Exception as e:
+                print(e)
+
+
+
     def parse(self):
-        
         for job in self.jobs:
             jobs_filter_list = [job]
             
@@ -124,7 +133,6 @@ class IndeedPaser:
 
                     query = recode_uri("https://www.indeed.fr/jobs?q={0}&l={1}".format(job_key_word, location))
                     print(query)
-                    #browser.get(query)
                     page = request.urlopen(query)
                     soup = BeautifulSoup(page)
                     
@@ -135,16 +143,15 @@ class IndeedPaser:
                     
                     for page_index in random.sample(range(0, pages_count), pages_count):
                         full_query = recode_uri("{0}&start={1}".format(query,page_index))
-                        #browser.get(full_query)
                         
                         item_page = request.urlopen(full_query)
                         item_soup = BeautifulSoup(item_page)
                         items = item_soup.select("a[class*='jobtitle']")
-                        #items = browser.find_elements_by_xpath("//*[contains(@class,'clickcard')]//*[contains(@class,'jobtitle')]")
                         items = [urljoin(self.website, item["href"]) for item in  items]
                         
                         for index_i, link in enumerate(items):
                             self._local_parse_page(link, location)
 
 parser = IndeedPaser()
-parser.parse()
+#parser.parse()
+parser.update_data()
