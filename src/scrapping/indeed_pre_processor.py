@@ -20,29 +20,34 @@ class IndeedPreProcessor:
         self.dao = IndeedMongodbDao()
         self.pages_path = r'C:\Users\Junior\Documents\Projects_Simplon\Projet_ML_gr3-master\scrapping\pages'
 
-        self.pre_processing_file_name = "indeed.pre_processing.csv"
+        self.pre_processing_file_name = "..\..\data\indeed.pre_processing.csv"
         self.delete_file()#delete pre_processing file befor re-create it
 
-        self.mongo_df = pd.read_csv("indeed_mongo.csv")
+        self.mongo_df = pd.read_csv("..\..\data\indeed_mongo.csv")
         self.processing_df = pd.DataFrame()
         self.salary_pattern = "[[S|s]alaire?[\s+]?:?[\s+]?(.*)e?[\s+]?\/(an|mois)|((.*)?[\s+]?par?[\s+]?(an|ans|mois|jour|heure))"
         self.keyWordsProvider = KeyWordsProvider()
 
     def process(self):
+        self.parse_location()
+        print("localisation enregistée")
         self.set_salary_man()
         print("salaire moyen enregistré")
         self.parse_education_level()
         print("niveau d'éducation enregistré")
-        self.set_type_de_cursus()
-        print("type de cursus enregistré")
-        self.set_type_de_contrat()
+        #self.set_type_de_cursus()
+        #print("type de cursus enregistré")
+        self.set_type_contrat_principal()
         print("type de contrat enregistré")
-        self.set_grande_categorie()
+        self.set_type_de_contrat()
+        #print("type de contrat description enregistré")
+        #self.set_grande_categorie()
         print("grande catégorie enregistré")
         self.parse_langage()
         print("langage de programmation enregistré")
         self.parse_tools()
         print("outils enregistré")
+        self.save_file()
 
     def _get_salary(self,select_result):
         salary = ""
@@ -81,12 +86,11 @@ class IndeedPreProcessor:
                     print("*****pattern value :",ele)
                     print(traceback.format_exc())
 
-
             data.append(inside_data)
 
         return data
 
-    def _set_quantitative_features(self, pattern, col_indice,label_col,func_callback = None):
+    def _set_quantitative_features(self, pattern, col_indice,label_col, func_callback = None):
         result = []
         for index, row in self.mongo_df.iterrows():
             re_pattern = re.compile(pattern)
@@ -150,18 +154,39 @@ class IndeedPreProcessor:
     def set_type_de_contrat(self):
         #j'ai desactivé le pattern "[(c|C)\w+]ontrat?:?\s\w{3,25}|"  car ça renovie "contrat logue", "contrat avec", etc
         reg_pattern = '(cdi|cdd|stage|alternance|alternant|cdic|freelance)|3\s*mois\s*renouvelable\s*'
-        self._set_quantitative_features(reg_pattern,3,"type_de_contrat", self._type_de_contrat_callback)
+        self._set_quantitative_features(reg_pattern,3,"type_contrat_description", self._type_de_contrat_callback)
+
+    def set_type_contrat_principal(self):
+        type_contracts = ['Apprentissage','Autre','CDD','CDI', 'Contrat pro','Freelance','Indépendant','Intérim','Stage','Temps partiel','Temps plein']
+        data = []
+        for index,item in self.mongo_df.iterrows():
+            result = []
+            for contrat in type_contracts:
+                if type(item["type_de_contrat"]) != float:
+                    if contrat in item["type_de_contrat"]:
+                        result.append(1)
+                    else:
+                        result.append(0)
+                else:
+                    result.append(0)
+            data.append(result)
+
+        type_contrat_principal_dict = pd.DataFrame(data, columns=type_contracts)
+        self.type_contrat_principal_df = pd.DataFrame.from_dict(type_contrat_principal_dict)
+        self._fusion_with_dataset(self.type_contrat_principal_df)
+
+
 
     def _type_de_contrat_callback(self,value):
         bac_pattern = "alternance|alternant"
         result = re.compile(bac_pattern).search(value)
         if result:
-            return "alternance"
-        return value
+            return "type_de_contrat_description_" + "alternance"
+        return "type_de_contrat_description_" + value
 
     def set_grande_categorie(self):
         reg_pattern = 'développeur?\s*(web|mobile|data|front\s*end|back\s*end|desktop|full stack\s*(developer))'
-        self._set_quantitative_features(reg_pattern,4,"grande_categorie",self._grande_categorie_callback)
+        self._set_quantitative_features(reg_pattern,4,"grande_categorie", self._grande_categorie_callback)
 
     def _grande_categorie_callback(self, value):
         bac_pattern = "front\s*end|back\s*end"
@@ -197,59 +222,63 @@ class IndeedPreProcessor:
         self.tools_df = pd.DataFrame.from_dict(tools_dict)
         self._fusion_with_dataset(self.tools_df)
 
+    def parse_location(self):
+        lieu = pd.get_dummies(self.mongo_df['localisation']).drop(['Bordeaux'], axis = 1)
+        self._fusion_with_dataset(lieu)
+
     def set_salary_man(self):
-    salaire_moyen = []
-    for i in range(len(self.mongo_df)):
-        try:
-            salaire_liste = re.findall('(\d+)',normalize('NFKD',self.mongo_df['salaire'][i]).replace(' ',''))
-            mois = re.search('mois',self.mongo_df['salaire'][i])
-            jour = re.search('jour',self.mongo_df['salaire'][i])
-            heure = re.search('heure',self.mongo_df['salaire'][i])
-            if mois:
-                if len(salaire_liste) > 1:
-                    moy = 12 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
-                    salaire_moyen.append(moy)
-                else:
-                    salaire_moyen.append(int(salaire_liste[0]) * 12)
-            elif jour:
-                # Le nombre de jours travaillés maximum retenu sur la période de référence est de 261 jours.
-                if len(salaire_liste) > 1:
-                    moy = 261 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
-                    salaire_moyen.append(moy)
-                else:
-                    salaire_moyen.append(int(salaire_liste[0]) * 261)
-            elif heure:
-                # 1600 heures travaillées par an.
-                if len(salaire_liste) > 1:
-                    moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
-                    if moy < 20:
-                    #grande chance que le salaire soit exprimé en fait en k euros:
-                        salaire_moyen.append(moy * 1600)
+        salaire_moyen = []
+        for i in range(len(self.mongo_df)):
+            try:
+                salaire_liste = re.findall('(\d+)',normalize('NFKD',self.mongo_df['salaire'][i]).replace(' ',''))
+                mois = re.search('mois',self.mongo_df['salaire'][i])
+                jour = re.search('jour',self.mongo_df['salaire'][i])
+                heure = re.search('heure',self.mongo_df['salaire'][i])
+                if mois:
+                    if len(salaire_liste) > 1:
+                        moy = 12 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
                     else:
-                        salaire_moyen.append(moy * 1000)
-                else:
-                    if int(salaire_liste[0]) < 20:
-                        salaire_moyen.append(int(salaire_liste[0]) * 1600)
+                        salaire_moyen.append(int(salaire_liste[0]) * 12)
+                elif jour:
+                    # Le nombre de jours travaillés maximum retenu sur la période de référence est de 261 jours.
+                    if len(salaire_liste) > 1:
+                        moy = 261 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
                     else:
-                        salaire_moyen.append(int(salaire_liste[0]) * 1000)
-            else:
-                if len(salaire_liste) > 1:
-                    moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
-                    salaire_moyen.append(moy)
+                        salaire_moyen.append(int(salaire_liste[0]) * 261)
+                elif heure:
+                    # 1600 heures travaillées par an.
+                    if len(salaire_liste) > 1:
+                        moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        if moy < 20:
+                        #grande chance que le salaire soit exprimé en fait en k euros:
+                            salaire_moyen.append(moy * 1600)
+                        else:
+                            salaire_moyen.append(moy * 1000)
+                    else:
+                        if int(salaire_liste[0]) < 20:
+                            salaire_moyen.append(int(salaire_liste[0]) * 1600)
+                        else:
+                            salaire_moyen.append(int(salaire_liste[0]) * 1000)
                 else:
-                    salaire_moyen.append(int(salaire_liste[0]))
+                    if len(salaire_liste) > 1:
+                        moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
+                    else:
+                        salaire_moyen.append(int(salaire_liste[0]))
 
-        except:
-            salaire_moyen.append('None')
-            continue
+            except:
+                salaire_moyen.append('None')
+                continue
 
-    label_col = "salaire_moyen"
+        label_col = "salaire_moyen"
 
-    if (label_col not in self.processing_df.columns):
-        self.processing_df.insert(0, label_col,salaire_moyen,True)
-    else:
-        self.processing_df[label_col] = pd.DataFrame(salaire_moyen)
-        self.processing_df[label_col]
+        if (label_col not in self.processing_df.columns):
+            self.processing_df.insert(0, label_col,salaire_moyen,True)
+        else:
+            self.processing_df[label_col] = pd.DataFrame(salaire_moyen)
+            self.processing_df[label_col]
 
 #    def set_salary_man(self):
 #        salaire_moyen = []
@@ -283,6 +312,7 @@ class IndeedPreProcessor:
 #                continue
 #
 #        label_col = "salaire_moyen"
+
 #
 #        if (label_col not in self.processing_df.columns):
 #            self.processing_df.insert(0, label_col,salaire_moyen,True)
@@ -291,3 +321,5 @@ class IndeedPreProcessor:
 #            self.processing_df[label_col]
     
     
+processor = IndeedPreProcessor()
+processor.process()

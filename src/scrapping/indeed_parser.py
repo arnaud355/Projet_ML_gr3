@@ -153,5 +153,5 @@ class IndeedPaser:
                             self._local_parse_page(link, location)
 
 parser = IndeedPaser()
-#parser.parse()
-parser.update_data()
+parser.parse()
+#parser.update_data()
