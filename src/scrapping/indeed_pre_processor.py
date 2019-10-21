@@ -257,6 +257,87 @@ class IndeedPreProcessor:
 
     def set_salary_man(self):
         salaire_moyen = []
+        ecart_salaire = []
+        salaire_min = []
+        salaire_max = []
+        for i in range(len(self.mongo_df)):
+            try:
+                salaire_liste = re.findall('(\d+),?',normalize('NFKD',self.mongo_df['salaire'][i]).replace(' ',''))
+                mois = re.search('mois',self.mongo_df['salaire'][i])
+                jour = re.search('jour',self.mongo_df['salaire'][i])
+                heure = re.search('heure',self.mongo_df['salaire'][i])
+                if mois:
+                    if len(salaire_liste) > 1:
+                        moy = 12 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
+                        ecart_salaire.append(12 * abs(int(salaire_liste[0]) - int(salaire_liste[1])) / moy)
+                        salaire_min.append(12 * min(int(salaire_liste[0]),int(salaire_liste[1])))
+                        salaire_max.append(12 * max(int(salaire_liste[0]),int(salaire_liste[1])))
+                    else:
+                        salaire_moyen.append(int(salaire_liste[0]) * 12)
+                        salaire_min.append(np.nan)
+                        salaire_max.append(np.nan)
+                elif jour:
+                    # Le nombre de jours travaillés maximum retenu sur la période de référence est de 261 jours.
+                    if len(salaire_liste) > 1:
+                        moy = 261 * (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
+                        ecart_salaire.append(261 * abs(int(salaire_liste[0]) - int(salaire_liste[1]))/ moy)
+                        salaire_min.append(261 * min(int(salaire_liste[0]),int(salaire_liste[1])))
+                        salaire_max.append(261 * max(int(salaire_liste[0]),int(salaire_liste[1])))
+                    else:
+                        salaire_moyen.append(int(salaire_liste[0]) * 261)
+                        salaire_min.append(np.nan)
+                        salaire_max.append(np.nan)
+                elif heure:
+                    # 1600 heures travaillées par an.
+                    if len(salaire_liste) > 1:
+                        moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        if moy < 20:
+                        #grande chance que le salaire soit exprimé en fait en k euros:
+                            salaire_moyen.append(moy * 1600)
+                            ecart_salaire.append(abs(int(salaire_liste[0]) - int(salaire_liste[1])) / moy)
+                            salaire_min.append(1600 * min(int(salaire_liste[0]),int(salaire_liste[1])))
+                            salaire_max.append(1600 * max(int(salaire_liste[0]),int(salaire_liste[1])))
+                        else:
+                            salaire_moyen.append(moy * 1000)
+                            ecart_salaire.append(abs(int(salaire_liste[0]) - int(salaire_liste[1])) / moy)
+                            salaire_min.append(1000 * min(int(salaire_liste[0]),int(salaire_liste[1])))
+                            salaire_max.append(1000 * max(int(salaire_liste[0]),int(salaire_liste[1])))
+                    else:
+                        if int(salaire_liste[0]) < 20:
+                            salaire_moyen.append(int(salaire_liste[0]) * 1600)
+                            salaire_min.append(np.nan)
+                            salaire_max.append(np.nan)
+                        else:
+                            salaire_moyen.append(int(salaire_liste[0]) * 1000)
+                            salaire_min.append(np.nan)
+                            salaire_max.append(np.nan)
+                else:
+                    if len(salaire_liste) > 1:
+                        moy = (int(salaire_liste[0]) + int(salaire_liste[1])) / 2
+                        salaire_moyen.append(moy)
+                        ecart_salaire.append(abs(int(salaire_liste[0]) - int(salaire_liste[1])) / moy)
+                        salaire_min.append(min(int(salaire_liste[0]),int(salaire_liste[1])))
+                        salaire_max.append(max(int(salaire_liste[0]),int(salaire_liste[1])))
+                    else:
+                        salaire_moyen.append(int(salaire_liste[0]))
+                        salaire_min.append(np.nan)
+                        salaire_max.append(np.nan)
+
+            except:
+                salaire_moyen.append(np.nan)
+                salaire_min.append(np.nan)
+                salaire_max.append(np.nan)
+                continue
+        self.processing_df['salaire_min'] = pd.DataFrame(salaire_min)
+        self.processing_df['salaire_max'] = pd.DataFrame(salaire_max)
+
+        #return salaire_moyen, ecart_salaire, salaire_min, salaire_max
+
+    """
+     def set_salary_man(self):
+        salaire_moyen = []
         for i in range(len(self.mongo_df)):
             try:
                 salaire_liste = re.findall('(\d+)',normalize('NFKD',self.mongo_df['salaire'][i]).replace(' ',''))
@@ -308,6 +389,8 @@ class IndeedPreProcessor:
         else:
             self.processing_df[label_col] = pd.DataFrame(salaire_moyen)
             self.processing_df[label_col]
+    """
+
 
 #    def set_salary_man(self):
 #        salaire_moyen = []
@@ -352,5 +435,5 @@ class IndeedPreProcessor:
     
 processor = IndeedPreProcessor()
 #processor.build_mongo_csv_file()
-#processor.process()
-processor.save_file()
+processor.process()
+#processor.save_file()
