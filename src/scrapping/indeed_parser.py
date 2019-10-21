@@ -107,6 +107,9 @@ class IndeedPaser:
     def update_data(self):
         items = self.dao.get_all_data()
         for index_i, item in enumerate(items):
+
+            #if (type(item["adresse"]) != float) and ("avis" not in item["adresse"]):
+            #    continue
             try:
                 #self._local_parse_page(link, location)
                 title, name, address, date, salaire, description, contract_type = self.indeed_item_parser.parse(item["url"])
@@ -153,5 +156,5 @@ class IndeedPaser:
                             self._local_parse_page(link, location)
 
 parser = IndeedPaser()
-parser.parse()
-#parser.update_data()
+#parser.parse()
+parser.update_data()

@@ -21,12 +21,19 @@ class IndeedPreProcessor:
         self.pages_path = r'C:\Users\Junior\Documents\Projects_Simplon\Projet_ML_gr3-master\scrapping\pages'
 
         self.pre_processing_file_name = "..\..\data\indeed.pre_processing.csv"
+        self.input_file_name = "..\..\data\indeed.input.csv"
         self.delete_file()#delete pre_processing file befor re-create it
 
         self.mongo_df = pd.read_csv("..\..\data\indeed_mongo.csv")
         self.processing_df = pd.DataFrame()
         self.salary_pattern = "[[S|s]alaire?[\s+]?:?[\s+]?(.*)e?[\s+]?\/(an|mois)|((.*)?[\s+]?par?[\s+]?(an|ans|mois|jour|heure))"
         self.keyWordsProvider = KeyWordsProvider()
+
+    def build_mongo_csv_file(self):
+        dao = IndeedMongodbDao()
+        data = dao.get_all_data()
+        df = pd.DataFrame(list(data))
+        df.to_csv("..\..\data\indeed_mongo.csv")
 
     def process(self):
         self.parse_location()
@@ -35,17 +42,21 @@ class IndeedPreProcessor:
         print("salaire moyen enregistré")
         self.parse_education_level()
         print("niveau d'éducation enregistré")
-        #self.set_type_de_cursus()
-        #print("type de cursus enregistré")
+        self.set_type_de_cursus()
+        print("type de cursus enregistré")
         self.set_type_contrat_principal()
         print("type de contrat enregistré")
+        self.set_type_de_contrat_titre()
+        print("type de contrat titre enregistré")
         self.set_type_de_contrat()
-        #print("type de contrat description enregistré")
-        #self.set_grande_categorie()
+        print("type de contrat description enregistré")
+        self.set_grande_categorie()
         print("grande catégorie enregistré")
         self.parse_langage()
         print("langage de programmation enregistré")
         self.parse_tools()
+        print("outils enregistré")
+        self.set_centre()
         print("outils enregistré")
         self.save_file()
 
@@ -68,7 +79,12 @@ class IndeedPreProcessor:
         self.processing_df = pd.concat([self.mongo_df,self.processing_df], axis=1)
         self.processing_df.drop(self.processing_df.columns[0], axis=1,inplace=True)
         self.processing_df.to_csv(self.pre_processing_file_name,index=False)
-        print("fichier sauvegardé")
+        self.input_df = self.processing_df.copy()
+        cols_to_drop = ["Unnamed: 0.1","_id","adresse","date_de_publication","description","localisation","nom_entreprise","salaire",
+        "titre","type_de_contrat","url","niveau_etude","type_de_cursus","type_contrat_description","grande_categorie", "type_contrat_titre"]
+        self.input_df.drop(cols_to_drop, axis=1, inplace=True)
+        self.input_df.to_csv(self.input_file_name,index=False)
+        print("fichiers sauvegardé")
 
     def _get_binnary_list_data(self, input_list):
         data = []
@@ -90,11 +106,11 @@ class IndeedPreProcessor:
 
         return data
 
-    def _set_quantitative_features(self, pattern, col_indice,label_col, func_callback = None):
+    def _set_quantitative_features(self, pattern, col_indice, col_cible, label_col, func_callback = None):
         result = []
         for index, row in self.mongo_df.iterrows():
             re_pattern = re.compile(pattern)
-            value = re_pattern.search(row['description'].lower().replace('\n',' ').replace('\r',' '))
+            value = re_pattern.search(row[col_cible].lower().replace('\n',' ').replace('\r',' '))
             if value:
                 if func_callback is not None:
                     result.append(func_callback(value.group(0)))
@@ -113,7 +129,7 @@ class IndeedPreProcessor:
 
     def parse_education_level(self):
         reg_pattern = "([(b|B)\w+]ac\s*\+\s*[1-8])|ingénieur|master\s*(1|2)|(D|d)iplôme\s*supérieur"
-        self._set_quantitative_features(reg_pattern,1,"niveau_etude", self._education_level_callback)
+        self._set_quantitative_features(reg_pattern,1,"description", "niveau_etude", self._education_level_callback)
 
     def _education_level_callback(self, value):
         bac_pattern = "bac\s*\+\s*[1-8]"
@@ -136,7 +152,7 @@ class IndeedPreProcessor:
     def set_type_de_cursus(self):
         #j'ai desactivé le pattern "|([(m|M)\w+]aster?\s?\w{3,25})" master car ça renvoie "master dans" ou "master data"
         reg_pattern = '([(é|E)\w+]cole [(i|I)\w+]ngénieur?)|([(a|A)\w+]utodidacte?)|([(g|G)\w+]rande[s]? [(é|E)\w+]cole[s]?)|([(é|E)\w+]cole[s]? de [(c|C)\w+]ommerce[s]?)|([(i|I)\w+]ngénieur [(i|I)\w+]nformatique?)'
-        self._set_quantitative_features(reg_pattern,2,"type_de_cursus", self._type_cursus_callback)
+        self._set_quantitative_features(reg_pattern,2,"description","type_de_cursus", self._type_cursus_callback)
 
     def _type_cursus_callback(self, value):
         ge_pattern = "grandes?\s*(é|e)coles?"
@@ -154,7 +170,11 @@ class IndeedPreProcessor:
     def set_type_de_contrat(self):
         #j'ai desactivé le pattern "[(c|C)\w+]ontrat?:?\s\w{3,25}|"  car ça renovie "contrat logue", "contrat avec", etc
         reg_pattern = '(cdi|cdd|stage|alternance|alternant|cdic|freelance)|3\s*mois\s*renouvelable\s*'
-        self._set_quantitative_features(reg_pattern,3,"type_contrat_description", self._type_de_contrat_callback)
+        self._set_quantitative_features(reg_pattern,3,"description","type_contrat_description", self._type_de_contrat_callback)
+
+    def set_type_de_contrat_titre(self):
+        reg_pattern = '(cdi|cdd|stage|alternance|alternant|cdic|freelance)|3\s*mois\s*renouvelable\s*'
+        self._set_quantitative_features(reg_pattern,3,"titre","type_contrat_titre", self._type_de_contrat_titre_callback)
 
     def set_type_contrat_principal(self):
         type_contracts = ['Apprentissage','Autre','CDD','CDI', 'Contrat pro','Freelance','Indépendant','Intérim','Stage','Temps partiel','Temps plein']
@@ -175,18 +195,27 @@ class IndeedPreProcessor:
         self.type_contrat_principal_df = pd.DataFrame.from_dict(type_contrat_principal_dict)
         self._fusion_with_dataset(self.type_contrat_principal_df)
 
-
+    def set_centre(self):
+        centre = [1 if (self.mongo_df['localisation'][i] in self.mongo_df['adresse'][i]) else 0 for i in range(len(self.mongo_df))]
+        self.processing_df['centre'] = centre
 
     def _type_de_contrat_callback(self,value):
         bac_pattern = "alternance|alternant"
         result = re.compile(bac_pattern).search(value)
         if result:
-            return "type_de_contrat_description_" + "alternance"
-        return "type_de_contrat_description_" + value
+            return "alternance_desc"
+        return value + "_desc"
+
+    def _type_de_contrat_titre_callback(self,value):
+        bac_pattern = "alternance|alternant"
+        result = re.compile(bac_pattern).search(value)
+        if result:
+            return "alternance_titre"
+        return value + "_titre"
 
     def set_grande_categorie(self):
         reg_pattern = 'développeur?\s*(web|mobile|data|front\s*end|back\s*end|desktop|full stack\s*(developer))'
-        self._set_quantitative_features(reg_pattern,4,"grande_categorie", self._grande_categorie_callback)
+        self._set_quantitative_features(reg_pattern,4,"description","grande_categorie", self._grande_categorie_callback)
 
     def _grande_categorie_callback(self, value):
         bac_pattern = "front\s*end|back\s*end"
@@ -322,4 +351,6 @@ class IndeedPreProcessor:
     
     
 processor = IndeedPreProcessor()
-processor.process()
+#processor.build_mongo_csv_file()
+#processor.process()
+processor.save_file()

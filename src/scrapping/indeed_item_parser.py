@@ -49,16 +49,19 @@ class IndeedItemParser:
         
     
     def _get_address(self,soup):
-         try:   
-            address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
-            if address[2].text == "-":
-                return address[3].text
-            return address[2].text
+         try:
+             address = soup.select("*[class*='jobsearch-JobMetadataHeader-iconLabel']")
+             if len(address) > 0:
+                 return address[0].text
+             address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
+             if address[2].text == "-":
+                 return address[3].text
+             return address[2].text
          except Exception as e:
-                address = soup.select("*[class*='jobsearch-JobMetadataHeader-iconLabel']")
-                if len(address) > 0:
-                    return address[0].text
-                return np.nan
+             address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
+             if address[2].text == "-":
+                 return address[3].text
+             return address[2].text
          
         
     def _get_salary_result(self,select_result):
