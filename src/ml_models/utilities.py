@@ -190,7 +190,7 @@ def grid_search_simple(classificateur,file_name, X, y):
                    "subsample":[0.5, 0.8, 1.0],
                    "n_estimators":[100,150,200]
                   }],
-              "xgboost":[xgb.XGBClassifier(),{'nthread':[4], #when use hyperthread, xgboost may become slower
+              "xgboost":[xgb.XGBClassifier(),{
                   'objective':['binary:logistic'],
                   "max_depth": [3, 5, 8],
                   "learning_rate": [0.1, 0.3, 0.5],
