@@ -1,0 +1,186 @@
+.navclass {
+  border-radius: 5px;
+  height: 150px;
+  background-color: #333333;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+}
+.navclass:hover {
+  background-color:  #111111;
+}
+
+div {
+    display: block;
+}
+#menu {
+     text-align: center;
+}
+.dropbtn {
+  background-color: #333333;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropbtn:hover {
+  background-color:  #111111;
+}
+
+.dropdown {
+  visibility: none;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+
+.iframeMenu {
+    border: none;
+    text-align: center;
+    height: 300px;
+    width: 300px;
+    background-color: white;
+    cursor: default;
+}
+.iframeMenu:hover {
+    background-color: black;
+}
+
+
+
+ul.class_menu  {
+    padding:0;
+    margin: 0 auto;
+    list-style-type:none;
+    background-color: #333333;
+}
+ul.class_menu li {
+    display: inline;
+    cursor: default;
+}
+ul.class_menu li:hover {
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+ul.class_menu li a {
+    background-color: #333333;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+ul.class_menu li a:hover {
+  color: black;
+}
+/*corps  ********************* */
+section.section_class {
+    text-align: center;
+}
+div.corps_graph {
+    display: inline-block;
+}
+ul.class_corps  {
+    padding:0;
+    width: 90%;
+    margin: 0 auto;
+    list-style-type:none;
+}
+ul.class_corps li {
+    display: inline;
+    float: left;
+    position: static;
+    height: 250px;
+}
+ul.class_corps li:hover {
+  color: black;
+  background-color: pink;
+ /* background-color: 3px solid #111111;*/
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Safari 3-8 */
+  transform: scale(1.5);
+  border-radius: 5px;
+}
+ul.class_corps li a {
+    display: block;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+}
+ul.class_corps li a:hover {
+    border: 2px solid black;
+}
+.a_corps {
+    position: relative;
+    margin-top: 10px;
+}
+
+/* class des graphes*/
+a.accueil {
+  background-color: #333333;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+div.chart {
+     margin: auto;
+     width: 60%;
+}
+/*.chart{
+    max-width: 1000px;
+}*/
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .example {background: red;}
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .example {background: green;}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .example {background: blue;}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .example {background: orange;}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .example {background: pink;}
+}
+
+
+

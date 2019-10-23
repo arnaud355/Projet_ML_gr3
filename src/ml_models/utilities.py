@@ -190,17 +190,12 @@ def grid_search_simple(classificateur,file_name, X, y):
                    "subsample":[0.5, 0.8, 1.0],
                    "n_estimators":[100,150,200]
                   }],
-              "xgboost":[xgb.XGBClassifier(),{'nthread':[4], #when use hyperthread, xgboost may become slower
+              "xgboost":[xgb.XGBClassifier(),{
                   'objective':['binary:logistic'],
-                  'learning_rate': [0.05], #so called `eta` value
-                  'max_depth': [6],
-                  'min_child_weight': [11],
-                  'silent': [1],
-                  'subsample': [0.8],
-                  'colsample_bytree': [0.7],
-                  'n_estimators': [5], #number of trees, change it to 1000 for better results
-                  'missing':[-999],
-                  'seed': [1337]}]}
+                  "max_depth": [3, 5, 8],
+                  "learning_rate": [0.1, 0.3, 0.5],
+                  "n_estimators":[100,150,200] #number of trees, change it to 1000 for better results
+                  }]}
     
     
     estimat = modeles[classificateur][0]
