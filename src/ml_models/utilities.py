@@ -191,7 +191,7 @@ def grid_search_simple(classificateur,file_name, X, y):
                    "n_estimators":[100,150,200]
                   }],
               "xgboost":[xgb.XGBClassifier(),{
-                  'objective':['binary:logistic'],
+                  'objective':['multi:softmax'],
                   "max_depth": [3, 5, 8],
                   "learning_rate": [0.1, 0.3, 0.5],
                   "n_estimators":[100,150,200] #number of trees, change it to 1000 for better results
