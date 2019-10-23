@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from indeed_item_parser import IndeedItemParser
 from indeed_mongodb_dao import IndeedMongodbDao
 from key_words_provider import KeyWordsProvider
+from csv_mongodb_migrator_tool import CsvToMongodbMigratorTool
 
 
 class IndeedPaser:
@@ -34,6 +35,7 @@ class IndeedPaser:
         self.website = "https://www.indeed.fr"
         self.driverPath = "C:\\Users\\User\\Documents\\selenium\\driver\\chromedriver.exe"
         self.dao = IndeedMongodbDao()
+        self.migrator_tool = CsvToMongodbMigratorTool()
         
         self.jobs = ["developpeur", "data scientist", "data analyst", "business intelligence"]
         self.locations = ["Lyon", "Toulouse", "Nantes", "Bordeaux","Paris"]
@@ -120,8 +122,6 @@ class IndeedPaser:
             except Exception as e:
                 print(e)
 
-
-
     def parse(self):
         for job in self.jobs:
             jobs_filter_list = [job]
@@ -155,6 +155,10 @@ class IndeedPaser:
                         for index_i, link in enumerate(items):
                             self._local_parse_page(link, location)
 
+    def migrate_to_csv(self):
+        self.migrator_tool.migrate_to_csv()
+
 parser = IndeedPaser()
-#parser.parse()
-parser.update_data()
+parser.parse()
+#parser.update_data()
+parser.migrate_to_csv()

@@ -78,7 +78,8 @@ class IndeedPreProcessor:
     def save_file(self):
         self.processing_df = pd.concat([self.mongo_df,self.processing_df], axis=1)
         self.processing_df.drop(self.processing_df.columns[0], axis=1,inplace=True)
-        self.processing_df.to_csv(self.pre_processing_file_name,index=False)
+        self.processing_df.to_csv(self.pre_processing_file_name, index=False)
+        #data2 = data[~data.duplicated(subset=['description', 'adresse', 'titre'], keep='first')]
         self.input_df = self.processing_df.copy()
         cols_to_drop = ["Unnamed: 0.1","_id","adresse","date_de_publication","description","localisation","nom_entreprise","salaire",
         "titre","type_de_contrat","url","niveau_etude","type_de_cursus","type_contrat_description","grande_categorie", "type_contrat_titre"]
@@ -330,6 +331,7 @@ class IndeedPreProcessor:
                 salaire_min.append(np.nan)
                 salaire_max.append(np.nan)
                 continue
+        self.processing_df['salaire_moyen'] = pd.DataFrame(salaire_moyen)
         self.processing_df['salaire_min'] = pd.DataFrame(salaire_min)
         self.processing_df['salaire_max'] = pd.DataFrame(salaire_max)
 
