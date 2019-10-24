@@ -1,0 +1,4 @@
+- npm install -g yarn
+- yarn global add create-react-app react-scripts
+https://www.youtube.com/watch?v=YW8VG_U-m48&t=639s
+https://github.com/reduction-admin/react-reduction
