@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+   <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
+
+    <title>Mon premier dashboard</title>
+  </head>
+
+  <body>
+      <div class="content" id="menu">
+              <header>
+                <div class="header-background"></div>
+                    <div class="title">
+                         <h1>
+                            Mon dashboard
+                        </h1>
+
+                    </div>
+
+              </header>
+
+            <p>Cliquez sur "Choix des graphes"</p>
+
+            <div class="dropdown">
+                 <button onclick="myFunction()" class="dropbtn">Choix des graphes</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <ul class="class_menu">
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_bar/">Graphique en barre</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_scatter/">Graphique scatter</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_stacked/">Graphique stacked</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_pie/">Graphique pie</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_ring/">Graphique ring</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_radar/">Graphique radar</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_box/">Graphique box</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_dot/">Graphique dot</a>
+                        </li>
+                        <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_gauge/">Graphique gauge</a>
+                        </li>
+                          <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_line/">Graphique line</a>
+                        </li>
+                          <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_treemap/">Graphique treemap</a>
+                        </li>
+                          <li>
+                            <a href="http://127.0.0.1:5000/dashboard/graph_map/">Graphique map</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+
+      </div>
+
+
+         <!-- <form id="myForm"  method="post">
+              <label class="form_col" for="info">Info sur le dataset:</label>
+              <input name=infodata id="info" type="text" />
+              <label>Veuillez choisir un ou plusieurs paramètres pour le salaire:
+                  <select name="poste" multiple size="4">
+                    <optgroup label="parametre1">
+                        <option value={{request.form.salaire}}>Salaire</option>
+                         <option value="chat">Chat</option>
+                    </optgroup>
+                       <select name="parametre" multiple size="4">
+                    <optgroup label="parametre2">
+                        <option value={{request.form.age}}>Age</option>
+                         <option value="chat">Chat</option>
+                    </optgroup>
+                           <input type="submit" value="Submit">
+                       </select>
+          </form>
+      </nav>-->
+      <!--<nav>
+          <form id="myForm" action="http://127.0.0.1:5000/traitement.py" method="post">
+              <label class="form_col" for="info">Info sur le dataset:</label>
+              <input name=infodata id="info" type="text" />
+              <label>Veuillez choisir un ou plusieurs paramètres pour le salaire:
+                  <select name="poste" multiple size="4">
+                    <optgroup label="Animaux à 4-jambes">
+                      <option value="Chien">Chien</option>
+                      <option value="chat">Chat</option>
+                      <option value="hamster" disabled>Hamster</option>
+                    </optgroup>
+                    <optgroup label="Animaux volants">
+                      <option value="perroquet">Perroquet</option>
+                      <option value="macaw">Macaw</option>
+                      <option value="albatros">Albatros</option>
+                    </optgroup>
+                  </select>
+                </label>
+
+              <input type="submit" value="Submit">
+          </form>
+      </nav>-->
+        <section class="section_class">
+          <div class="corps_graph">
+                 <ul class="class_corps">
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_bar/" class="a_corps">Graphique Bar</a>
+                                <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_bar/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_map/" class="a_corps">Graphique Map</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_map/" class="iframeMenu"></iframe>
+                            </li>
+                             <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_line/" class="a_corps">Graphique Line</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_line/" class="iframeMenu"></iframe>
+                            </li>
+
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_pie/" class="a_corps">Graphique Pie</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_pie/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_ring/" class="a_corps">Graphique Ring</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_ring/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_radar/" class="a_corps">Graphique Radar</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_radar/" class="iframeMenu"></iframe>
+                            </li>
+                              <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_box/" class="a_corps">Graphique Box</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_box/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_dot/" class="a_corps">Graphique Dot</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_dot/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_gauge/" class="a_corps">Graphique Gauge</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_gauge/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_stacked/" class="a_corps">Graphique Stacked bar</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_stacked/" class="iframeMenu"></iframe>
+                            </li>
+                            <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_treemap/" class="a_corps">Graphique Treemap</a>
+                                 <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_treemap/" class="iframeMenu"></iframe>
+                            </li>
+                             <li>
+                                <a href="http://127.0.0.1:5000/dashboard/graph_scatter/" class="a_corps">Graphique Scatter</a>
+                                <iframe src="http://127.0.0.1:5000/dashboard/menu_graph_scatter/" class="iframeMenu"></iframe>
+                            </li>
+
+                 </ul>
+          </div>
+        </section>
+            <script src="{{ url_for('static', filename='JS/menu_deroulant.js') }}"></script>
+
+
+  </body>
+</html>
