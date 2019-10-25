@@ -1,24 +1,24 @@
 class KeyWordsProvider:
     
     def get_langages(self):
-        return ['python', 'r','vba', 'mysql','excel','asp.net','nosql','sql','linux','mongodb',
-            'mariadb','java','javascript','php','html','css','sas','c#','ruby','swift','objective-c',
-            'vb.net','kotlin','scala','bash','powershell','shell','front end','back end','soap',
-            'dasl', 'pict', 'rexx', 'd', 'asp.net', 'f#', 'joy', 'sr', 'back end', 'poplog', 
-            'modula-2', 'powershell', 'bash', 'concurrent pascal', 'apl', 'eiffel', 'lisp', 
-            'cilk', 'c', 'awk', 'charity', 'bliss', 'spin', 'swift', 'visual basic', 'game maker language',
-            'lisaac', 'xl', 'nosql', 'limbo', 'e', 'lava', 'slate', 'revolution', 'coldfusion', 
-            'matlab', 'vb.net', 'cobol', 'tcl', 'rpg', 'sas', 'curl', 'front end', 'nemerle', 'f-script', 
-            'xml', 's-lang', 'curry', 'basic', 'autoit', 'prolog', 'erlang', 'maya embedded language', 
-            'frink', 'oz', 'windows powershell', 'beta', 'moo', 'object-z', 'self', 'leda', 'fortran', 
-            'smalltalk', 'afnix', 'mysql', 'm', 'turing', 'jovial', 'lua', 'mondrian', 'io', 'salsa', 
-            'kotlin', 'css', 'xotcl', 'perl', 'component pascal', 'mongodb', 'xhtml', 'dibol', 'oberon',
-            'ada', 'visual foxpro', 'clist', 'pl/c', 'algol', 'mariadb', 'sql', 'pliant', 'excel', 
-            'cobra', 'occam', 'obliq', 'prograph', 'chuck', 'pl/i', 'hypertalk', 'forth', 'ici', 
-            'vba', 'beanshell', 'sgml', 'soap', 'opal', 'small', 'pascal', 'applescript', 'roop', 
-            'agora', 'moto', 'rapira', 'alf', 'r', 'ml', 'javascript', 'pcastl', 'abcl', 'postscript', 
-            'oxygene', 'cecil', 'clean', 'ops5', 'c++', 'shell', 'haskell', 'kite', 'cleo', 'q', 'linux', 
-                'vbscript', 'joule', 'rebol', 'jass', 'j', 'fril']
+        return ['abcl', 'ada', 'afnix', 'agora', 'alf', 'algol', 'apl', 'applescript', 'asp.net',
+                 'autoit', 'awk', 'back end', 'bash', 'basic', 'beanshell', 'beta' ,'bliss', 'c',
+                 'c#', 'c\\+\\+', 'cecil', 'charity', 'chuck', 'cilk' ,'clean' ,'cleo', 'clist',
+                 'cobol', 'cobra' ,'coldfusion', 'component pascal' ,'concurrent pascal', 'css',
+                 'curl', 'curry' ,'d' ,'dasl' ,'dibol', 'e', 'eiffel' ,'erlang' ,'excel', 'f#',
+                 'f-script', 'forth', 'fortran' ,'fril', 'frink', 'front end',
+                 'game maker language', 'haskell' ,'html' ,'hypertalk' ,'ici' ,'io', 'j' ,'jass',
+                 'java', 'javascript', 'joule' ,'jovial' ,'joy' ,'kite' ,'kotlin' ,'lava', 'leda',
+                 'limbo', 'linux', 'lisaac', 'lisp', 'lua', 'm' ,'mariadb', 'matlab',
+                 'maya embedded language', 'ml' ,'modula-2', 'mondrian', 'mongodb', 'moo',
+                 'moto', 'mysql' ,'nemerle', 'nosql' ,'oberon' ,'object-z' ,'objective-c',
+                 'obliq' ,'occam' ,'opal' ,'ops5' ,'oxygene' ,'oz' ,'pascal' ,'pcastl' ,'perl',
+                 'php', 'pict', 'pl/c' ,'pl/i' ,'pliant' ,'poplog' ,'postscript', 'powershell',
+                 'prograph', 'prolog', 'python', 'q', 'r', 'rapira', 'rebol' ,'revolution' ,'rexx',
+                 'roop', 'rpg', 'ruby' ,'s-lang', 'salsa' ,'sas' ,'scala' ,'self' ,'sgml' ,'shell',
+                 'slate', 'small', 'smalltalk' ,'soap' ,'spin' ,'sql' ,'sr' ,'swift', 'tcl',
+                 'turing', 'vb.net', 'vba', 'vbscript', 'visual basic' ,'visual foxpro',
+                'windows powershell', 'xhtml' ,'xl' ,'xml', 'xotcl']
     
     def get_tools(self):
         return ['tableau', 'powerbi','symfony', 'jquery','angular','react','react native','node js','git','github',
@@ -26,4 +26,4 @@ class KeyWordsProvider:
                'azure','aws', 'teamcity', 'jenkins']
     
     def get_others(self):
-        return ['cisco','intel','android','ios','unity', 'Unreal Engine', 'UX Designer','realite virtuelle','realite augmentée','Game','IHM','VR','AR','3D','electronic','iot']
+        return ['cisco','intel','android','ios','unity', 'unreal engine', 'ux designer','realite virtuelle','realite augmentee','game','ihm','vr','ar','3d','electronic','iot']

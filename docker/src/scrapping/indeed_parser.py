@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from indeed_item_parser import IndeedItemParser
 from indeed_mongodb_dao import IndeedMongodbDao
 from key_words_provider import KeyWordsProvider
+from csv_mongodb_migrator_tool import CsvToMongodbMigratorTool
 
 
 class IndeedPaser:
@@ -34,6 +35,7 @@ class IndeedPaser:
         self.website = "https://www.indeed.fr"
         self.driverPath = "C:\\Users\\User\\Documents\\selenium\\driver\\chromedriver.exe"
         self.dao = IndeedMongodbDao()
+        self.migrator_tool = CsvToMongodbMigratorTool()
         
         self.jobs = ["developpeur", "data scientist", "data analyst", "business intelligence"]
         self.locations = ["Lyon", "Toulouse", "Nantes", "Bordeaux","Paris"]
@@ -77,7 +79,7 @@ class IndeedPaser:
             elif self.dao.url_exist_on_duplicate_data(item_link) == True:
                 print("duplicate url and aready parsed, skip")
             else:
-                title, name, address, date,salaire, description = self.indeed_item_parser.parse(item_link)
+                title, name, address, date,salaire, description, contract_type = self.indeed_item_parser.parse(item_link)
                 if self.dao.description_exist(description) == True:
                     self.dao.insert_to_dulicate_data(item_link)
                     print("duplicate. archived and skip.")
@@ -86,8 +88,8 @@ class IndeedPaser:
                     print("date nan - ", item_link)
                 
                 if (item_link != np.nan) & (title != np.nan) & (name != np.nan) & (address != np.nan) & (description != np.nan):
-                    self.dao.insert_data(item_link,title,name,address,date,salaire,description,localisation)
-                    print("saved :",item_link)   
+                    self.dao.insert_data(item_link, title, name, address, date, salaire, description, localisation, contract_type)
+                    print("saved :", item_link)
                     print(salaire)
                 
                 #self.create_local_file(item_link, source)
@@ -103,9 +105,24 @@ class IndeedPaser:
         source = item_link + "----------------" + source
         file.write(source)
         file.close()
-                    
+
+    def update_data(self):
+        items = self.dao.get_all_data()
+        for index_i, item in enumerate(items):
+
+            #if (type(item["adresse"]) != float) and ("avis" not in item["adresse"]):
+            #    continue
+            try:
+                #self._local_parse_page(link, location)
+                title, name, address, date, salaire, description, contract_type = self.indeed_item_parser.parse(item["url"])
+                if (item["url"] != np.nan) & (title != np.nan) & (name != np.nan) & (address != np.nan) & (description != np.nan):
+                        self.dao.update_data(item["_id"], item["url"], title, name, address, date, salaire, description, contract_type)
+                        print("updated :", item["url"])
+                        print(salaire)
+            except Exception as e:
+                print(e)
+
     def parse(self):
-        
         for job in self.jobs:
             jobs_filter_list = [job]
             
@@ -138,5 +155,10 @@ class IndeedPaser:
                         for index_i, link in enumerate(items):
                             self._local_parse_page(link, location)
 
+    def migrate_to_csv(self):
+        self.migrator_tool.migrate_to_csv()
+
 parser = IndeedPaser()
 parser.parse()
+#parser.update_data()
+parser.migrate_to_csv()

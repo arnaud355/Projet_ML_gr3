@@ -49,16 +49,19 @@ class IndeedItemParser:
         
     
     def _get_address(self,soup):
-         try:   
-            address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
-            if address[2].text == "-":
-                return address[3].text
-            return address[2].text
+         try:
+             address = soup.select("*[class*='jobsearch-JobMetadataHeader-iconLabel']")
+             if len(address) > 0:
+                 return address[0].text
+             address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
+             if address[2].text == "-":
+                 return address[3].text
+             return address[2].text
          except Exception as e:
-                address = soup.select("*[class*='jobsearch-JobMetadataHeader-iconLabel']")
-                if len(address) > 0:
-                    return address[0].text
-                return np.nan
+             address = soup.select("*[class*='jobsearch-InlineCompanyRating'] div")
+             if address[2].text == "-":
+                 return address[3].text
+             return address[2].text
          
         
     def _get_salary_result(self,select_result):
@@ -72,6 +75,17 @@ class IndeedItemParser:
                     break
         return salary
 
+    def _get_contract_types_result(self, select_result):
+        for item in select_result:
+            if any(word in item.text.lower() for word in ["cdi","cdd","stage","alternance","temps plein","apprentissage","contrat pro"]):
+                return item.text.strip()
+
+    def _get_contract_type(self, soup):
+        result = soup.select(".jobsearch-JobMetadataHeader-iconLabel")
+        if len(result) > 0:
+            return self._get_contract_types_result(result)
+        return np.nan
+
     def _get_salary(self,soup, url):
         try:
             result = soup.select(".jobsearch-JobMetadataHeader-item")
@@ -82,9 +96,12 @@ class IndeedItemParser:
             if len(result) > 0:
                 return self._get_salary_result(result)
 
+            result = soup.select(".jobMetadataHeader-itemWithIcon-label")
+            if len(result) > 0:
+                return self._get_salary_result(result)
+
             result = soup.select("#jobDescriptionText")
             if len(result) > 0:
-                index = index + 1 
                 outer_salary = re.compile(self.salary_pattern)
                 m_salary = outer_salary.search(result[0].text)
                 if m_salary is not None:
@@ -96,7 +113,7 @@ class IndeedItemParser:
     
     def _get_description(self,soup):
         try:
-            e_description = soup.select("#jobDescriptionText")
+            e_description = soup.select(".jobsearch-JobComponent-description")
             if (len(e_description) > 0):
                 return e_description[0].text
             return np.nan
@@ -125,7 +142,6 @@ class IndeedItemParser:
             re_pattern_label = re.compile(r"\s.*?(jour|jours|heur|heurs|mois|an)")
             re_pattern_label = re_pattern_label.search(date_str_full)
             label = re_pattern_label.group(1)
-            print("label -", label,"count -: ", count)
             
             if "jour" in label:
                 date = date - timedelta(days=count)
@@ -137,7 +153,6 @@ class IndeedItemParser:
     
     
     def parse(self,url):
-        print("page item ",url)
         page = request.urlopen(url)
         soup = BeautifulSoup(page)
         
@@ -146,10 +161,12 @@ class IndeedItemParser:
         if name == np.nan:
             print("name missing")
         address = self._get_address(soup)
-        date = self._get_date(soup, url,name)
+        date = self._get_date(soup, url, name)
         description = self._get_description(soup)
-        salaire = self._get_salary(soup,url)
-        
-        return title, name, address, date, salaire, description
+        salary = self._get_salary(soup, url)
+        contract_type = self._get_contract_type(soup)
+
+        print("title -",title, "name -",name, "address -",address, "date -", date, "salary -",salary, "contract_type -",contract_type)
+        return title, name, address, date, salary, description, contract_type
 
 
