@@ -84,9 +84,9 @@ class Multiply(Resource):
 def hello():
     return render_template("index.html")
 
-@app.route('/dashboard/')
+@app.route('/Paris_Vs_Ville/')
 def dashboard():
-    return render_template("dashboard.html")
+    return render_template("ParisVsVille.html")
 
 #Les graphes de base affichés en iframe
 @app.route('/dashboard/menu_graph_bar/')
