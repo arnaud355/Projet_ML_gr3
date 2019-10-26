@@ -139,46 +139,48 @@ def grid_search_simple(classificateur,file_name, X, y):
     modeles = {"logreg":[LogisticRegression(),[
                 {'penalty': ['l2'],'C':[0.1,0.6,1,2,5,10],
                   'multi_class':['ovr', 'multinomial'],'class_weight':['balanced', None],
-                  'solver':['lbfgs','sag','newton-cg'],'max_iter':[1000]
+                  'solver':['lbfgs','sag','newton-cg'],'max_iter':[1000],"random_state": [0]
                 },
                 {'penalty': ['l1','l2'],'C':[0.1,0.6,1,2,5,10],
                   'multi_class':['ovr'],'class_weight':['balanced', None],
-                  'solver':['liblinear'],'max_iter':[1000]
+                  'solver':['liblinear'],'max_iter':[1000],"random_state": [0]
                 },]],
               "SVM":[SVC(),[
                 {'C': [0.1,0.6,1,2,5,10],'class_weight':['balanced', None],
                  'gamma': ['scale','auto'], 'kernel': ['linear'],
-                 'decision_function_shape': ['ovo', 'ovr']
+                 'decision_function_shape': ['ovo', 'ovr'],"random_state": [0]
                 },
                 {'C': [0.1,0.6,1,2,5,10], 'class_weight':['balanced', None],
                  'gamma': ['scale','auto'], 'kernel': ['rbf'],
-                 'decision_function_shape': ['ovo', 'ovr']
+                 'decision_function_shape': ['ovo', 'ovr'],"random_state": [0]
                 },
                 {'C': [0.1,0.6,1,2,5,10], 'class_weight':['balanced', None],
                  'gamma': ['scale','auto'], 'kernel': ['poly'], 'degree': [2,3,4,5,6,7],
-                 'decision_function_shape': ['ovo', 'ovr']
+                 'decision_function_shape': ['ovo', 'ovr'],"random_state": [0]
                 },
                 {'C': [0.1,0.6,1,2,5,10],'class_weight':['balanced', None],
                  'gamma': ['scale','auto'], 'kernel': ['sigmoid'],
-                 'decision_function_shape': ['ovo', 'ovr']
+                 'decision_function_shape': ['ovo', 'ovr'],"random_state": [0]
                 }]],
               "RanFor":[RandomForestClassifier(),{
-                   'n_estimators': [50,100,150,200],
+                   'n_estimators': [100,150,200],
                    "criterion": ["gini", "entropy"],
-                   "max_depth": [3, 5, None],
-                   "min_samples_split": [2, 3, 5],
+                   "max_depth": [8, 10, 12, None],
+                   "min_samples_split": [2, 5],
                    "max_features": ["sqrt", "log2", None],
                    "bootstrap": [True, False],
-                   "class_weight": ["balanced", "balanced_subsample", None]
+                   "class_weight": ["balanced", "balanced_subsample", None],
+                   "random_state": [0]
                    }],
               "ExtTre":[ExtraTreesClassifier(),{
                    'n_estimators': [50,100,150,200],
                    "criterion": ["gini", "entropy"],
-                   "max_depth": [3, 5, None],
-                   "min_samples_split": [2, 3, 5],
+                   "max_depth": [8, 10, 12, None],
+                   "min_samples_split": [2, 5],
                    "max_features": ["sqrt", "log2", None],
                    "bootstrap": [True, False],
-                   "class_weight": ["balanced", "balanced_subsample", None]
+                   "class_weight": ["balanced", "balanced_subsample", None],
+                   "random_state": [0]
                   }],
               "graboo":[GradientBoostingClassifier(),{"loss":["deviance"],
                    "learning_rate": [0.1, 0.3, 0.5],
@@ -188,7 +190,8 @@ def grid_search_simple(classificateur,file_name, X, y):
                    "max_features":["log2","sqrt",None],
                    "criterion": ["friedman_mse"],
                    "subsample":[0.5, 0.8, 1.0],
-                   "n_estimators":[100,150,200]
+                   "n_estimators":[100,150,200],
+                   "random_state": [0]
                   }],
               "xgboost":[xgb.XGBClassifier(),{
                   'objective':['multi:softmax'],
@@ -196,7 +199,8 @@ def grid_search_simple(classificateur,file_name, X, y):
                   "max_depth": [3, 5, 8],
                   "subsample": [0.5,0.8,1],
                   "learning_rate": [0.1, 0.3, 0.5],
-                  "n_estimators":[100,150,200] #number of trees, change it to 1000 for better results
+                  "n_estimators":[100,150,200],
+                  "random_state": [0]
                   }]}
     
     
