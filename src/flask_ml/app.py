@@ -7,7 +7,7 @@ from random import *
 import numpy as np
 import pandas as pd
 import json
-
+import statistics
 import pymongo
 from pymongo import MongoClient
 from pandas.io.json import json_normalize
@@ -21,54 +21,6 @@ from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
 api = Api(app)  # type: Api
-
-"""
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["nba_DB"]
-mycol = mydb["nba_collection"]
-#x = mycol.find_one()
-#print(x)
-datapoints = list(mycol.find({}))
-
-nba = json_normalize(datapoints)
-#print(nba.head())
-#nba = pd.read_json('/Users/arnaudbaleh/Desktop/DATA_IA_Simplon/flask_ml_gr3/nba_machine_learning.json', lines=True)
-#nba = pd.read_csv('nba_salary.csv')
-# Make a query to the specific DB and Collection
-#cursor = mycol.find(query)
-# Expand the cursor and construct the DataFrame
-#nba =  pd.DataFrame(list(cursor))
-def raccourcir(liste1,liste2,t = 25):
-    list_short = []
-    list_short2 = []
-    i = 0
-    n = 0
-    taille = len(liste1) - 1
-    while i < t:
-        n = randint(1, taille)
-        list_short.append(liste1[n])
-        list_short2.append(liste2[n])
-        i += 1
-    return list_short, list_short2
-
-salaire_list = nba.groupby('Player').Salary.sum()
-#liste salaires nba
-salaire_list_short = salaire_list.tolist()
-salaire_list_short = [int(i) for i in salaire_list_short]
-#salaire = raccourcir(salaire_list_short,30)
-
-age_list = nba.groupby('Player').Age.sum()
-age_list_short = age_list.tolist()
-salaire, age = raccourcir(salaire_list_short, age_list_short,30)
-
-player_list = nba.groupby('Age').Player.sum()
-player_list_short = player_list.tolist()
-players, salaire = raccourcir(player_list_short, salaire_list_short,30)
-
-#[int(i) for i in age_list]
-#map(int, results)
-"""
-
 
 # Define parser and request args
 parser = reqparse.RequestParser()
@@ -84,9 +36,24 @@ class Multiply(Resource):
 def hello():
     return render_template("index.html")
 
-@app.route('/Paris_Vs_Ville/')
-def dashboard():
+@app.route('/Paris_Vs_Ville/page/<string:tag>')
+def paris_vs_ville(tag):
     return render_template("ParisVsVille.html")
+
+
+@app.route('/Paris_Vs_Ville/data')
+def paris_vs_ville_data():
+    df = pd.read_csv("../../data/indeed.predicted.csv")
+    locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+    result = {}
+    for item in locations:
+        temp = df[df["localisation"] == item]
+        result[item] = {"min": statistics.mean(temp["salaire_min"]),
+                        "moyen": statistics.mean(temp["salaire_moyen"]),
+                        "max": statistics.mean(temp["salaire_max"])
+                        }
+    return json.dumps(result)
+
 
 #Les graphes de base affichés en iframe
 @app.route('/dashboard/menu_graph_bar/')

@@ -56,7 +56,7 @@
 
       <!-- Nav Item - Paris vs Villes -->
       <li class="nav-item">
-        <a class="nav-link" href="/Paris_Vs_Ville/">
+        <a class="nav-link" href="/Paris_Vs_Ville/page/moyen">
           <i class="fas fa-city"></i>
           <span>Paris vs Villes</span></a>
       </li>
@@ -347,8 +347,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Charts</h1>
-          <p class="mb-4">Chart.js is a third party plugin that is used to generate the charts in this theme. The charts below have been customized - for further customization options, please visit the <a target="_blank" href="https://www.chartjs.org/docs/latest/">official Chart.js documentation</a>.</p>
+          <h1 class="h3 mb-2 text-gray-800">Répartition salariale par villes</h1>
 
           <!-- Content Row -->
           <div class="row">
@@ -358,14 +357,13 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                  <h6 id="salaire_paris_ville_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
                     <canvas id="myBarChart"></canvas>
                   </div>
                   <hr>
-                  Styling for the bar chart can be found in the <code>/js/demo/chart-bar-demo.js</code> file.
                 </div>
               </div>
 
@@ -379,20 +377,20 @@
                   <h6 class="m-0 font-weight-bold text-primary">Métriques</h6>
                 </div>
                 <!-- Card Body -->
-                <div class="card-body">
-                  <a href="#" class="btn btn-primary btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-flask"></i>
-                    </span>
-                    <span class="text">Moyen</span>
-                  </a>
-                  <a href="#" class="btn btn-success btn-icon-split">
+                <div class="card-body text-center">
+                  <a href="/Paris_Vs_Ville/page/min" class="btn btn-success btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-flask"></i>
                     </span>
                     <span class="text">Min</span>
                   </a>
-                  <a href="#" class="btn btn-info btn-icon-split">
+                  <a href="/Paris_Vs_Ville/page/moyen" class="btn btn-primary btn-icon-split">
+                    <span class="icon text-white-50">
+                      <i class="fas fa-flask"></i>
+                    </span>
+                    <span class="text">Moyen</span>
+                  </a>
+                  <a href="/Paris_Vs_Ville/page/max" class="btn btn-info btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-flask"></i>
                     </span>
