@@ -22,6 +22,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import ParameterGrid
+import statistics
 def plot_classification_report(cl, X_train, y_train,X_test, y_test, classe_labels):
     viz = ClassificationReport(cl, classes=classe_labels, support=True,)
     viz.fit(X_train, y_train)
@@ -254,3 +255,33 @@ def graph_result(fichier, n = 1500, variance = 0.1):
     plt.ylabel("Score",fontsize = 12)
     plt.legend(loc = 3)
     plt.show()
+
+def get_classes(y):
+    kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=1000).fit(y.values.reshape(-1, 1))
+    y_class_orig = kmeans.labels_
+    correspondance = list(pd.DataFrame(kmeans.cluster_centers_, columns=['center']).sort_values('center').index)
+    y_dic = {correspondance[i]: i for i in range(len(kmeans.cluster_centers_))}
+    y_ord = []
+    for i in y_class_orig:
+        y_ord.append(y_dic[i])
+    y_class = np.array(y_ord)
+
+    centroid = kmeans.cluster_centers_
+    centroid.sort(axis=0)
+    centre = list(centroid.reshape(1, -1)[0])
+    classe = [(centre[i] + centre[i + 1]) / 2 for i in range(len(centre) - 1)]
+    classe_labels = []
+    dic_min_max_mean = {}
+    k = 1000
+    for index, item in enumerate(classe):
+        b = 0
+        e = int(classe[index] / k)
+        if index > 0:
+            b = int(classe[index - 1] / k)
+        classe_labels.append("[{0}K - {1}K]".format(b, e))
+        dic_min_max_mean[index] = [min(b, e)*100,statistics.mean([b, e])*k,max(b, e)*k]
+    classe_labels.append("[{0}K - {1}]".format(int(classe[len(classe) - 1] / k), "+"))
+    dic_min_max_mean[len(classe)] = [int(classe[len(classe) - 1]), statistics.mean([int(classe[len(classe) - 1]), 200000]), 200000]
+    dic_classe_labels = {i: classe_labels[i] for i in range(len(classe_labels))}
+    #dic_min_max_mean = {i: [] for i,e in  enumerate(classe)}
+    return y_class, dic_classe_labels, dic_min_max_mean
