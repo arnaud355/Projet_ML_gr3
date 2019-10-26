@@ -22,6 +22,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import ParameterGrid
+import statistics
 def plot_classification_report(cl, X_train, y_train,X_test, y_test, classe_labels):
     viz = ClassificationReport(cl, classes=classe_labels, support=True,)
     viz.fit(X_train, y_train)
@@ -266,13 +267,17 @@ def get_classes(y):
     centre = list(centroid.reshape(1, -1)[0])
     classe = [(centre[i] + centre[i + 1]) / 2 for i in range(len(centre) - 1)]
     classe_labels = []
+    dic_min_max_mean = {}
+    k = 1000
     for index, item in enumerate(classe):
         b = 0
-        e = int(classe[index] / 1000)
+        e = int(classe[index] / k)
         if index > 0:
-            b = int(classe[index - 1] / 1000)
+            b = int(classe[index - 1] / k)
         classe_labels.append("[{0}K - {1}K]".format(b, e))
-    classe_labels.append("[{0}K - {1}]".format(int(classe[len(classe) - 1] / 1000), "+"))
+        dic_min_max_mean[index] = [min(b, e)*100,statistics.mean([b, e])*k,max(b, e)*k]
+    classe_labels.append("[{0}K - {1}]".format(int(classe[len(classe) - 1] / k), "+"))
+    dic_min_max_mean[len(classe)] = [int(classe[len(classe) - 1]), statistics.mean([int(classe[len(classe) - 1]), 200000]), 200000]
     dic_classe_labels = {i: classe_labels[i] for i in range(len(classe_labels))}
-
-    return y_class, dic_classe_labels
+    #dic_min_max_mean = {i: [] for i,e in  enumerate(classe)}
+    return y_class, dic_classe_labels, dic_min_max_mean
