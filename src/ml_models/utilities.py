@@ -192,7 +192,9 @@ def grid_search_simple(classificateur,file_name, X, y):
                   }],
               "xgboost":[xgb.XGBClassifier(),{
                   'objective':['multi:softmax'],
+                  'num_class': 4,
                   "max_depth": [3, 5, 8],
+                  "subsample": [0.5,0.8,1],
                   "learning_rate": [0.1, 0.3, 0.5],
                   "n_estimators":[100,150,200] #number of trees, change it to 1000 for better results
                   }]}
@@ -214,10 +216,10 @@ def grid_search_simple(classificateur,file_name, X, y):
     print(clf.best_estimator_)
     return clf.best_estimator_
 
-def graph_result(fichier, n = 1500, variance = 0.05):
-    result = pd.read_csv("hyperparameters/" + fichier)
-    result_variance = result[(result['mean_train_score'] - result['mean_test_score']) < variance]
-    
+def graph_result(fichier, n = 1500, variance = 0.1):
+    res = pd.read_csv("hyperparameters/" + fichier)
+    result = res[res['mean_test_score'] > 0.65]
+    result_variance = result[(result['mean_train_score'] - result['mean_test_score']) < variance * result['mean_test_score']]
     plt.figure(num=None, figsize=(14, 6), dpi=80, facecolor='w', edgecolor='k')
     
     plt.subplot(121)
@@ -227,7 +229,7 @@ def graph_result(fichier, n = 1500, variance = 0.05):
     plt.scatter(result['rank_test_score'][result['rank_test_score'] < n],
                 result['mean_train_score'][result['rank_test_score'] < n],color='blue',
                 marker = "x", label="Train Score")
-    
+    plt.ylim(0.64, 1)
     plt.title("Test Score et Train Score \nen fonction du classement au Test Score",
               fontsize = 14, loc = 'center')
     plt.xlabel("Classement au Test Score",fontsize = 12)
@@ -241,7 +243,7 @@ def graph_result(fichier, n = 1500, variance = 0.05):
     plt.scatter(result_variance['rank_test_score'][result_variance['rank_test_score'] < n],
                 result_variance['mean_train_score'][result_variance['rank_test_score'] < n],color='blue',
                 marker = "x", label="Train Score")
-    
+    plt.ylim(0.64, 1)
     plt.title("Test Score et Train Score \nen fonction du classement au Test Score",
               fontsize = 14, loc = 'center')
     plt.xlabel("Classement au Test Score",fontsize = 12)
