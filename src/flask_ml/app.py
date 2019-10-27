@@ -23,7 +23,16 @@ sys.path.append('../scrapping')
 
 langage_de_progs = ["JavaScript","Java","Python","PHP","C#","C++","CSS","Ruby","C","Objective-C","Swift","TypeScript","Scala","Shell","Go","R","PowerShell","Perl","Haskell","Kotlin", "Dart",
 "Haskell", "Ocaml","Lua", "F#","Scala","D","Swift","Erlang", "Julia"]
-
+outils_db = ["oracle", "mysql","Microsoft SQL Server", "PostgreSQL","DB2","Microsoft Access","SQLite","Teradata", "SAP Adaptative Server", "Hive", "FileMaker"
+             ,"SAP HANA", "MariaDB", "Informix", "Firebird", "microsoft azure sql database", "Vertica", "Netezza", "Ingres", "Greenplum", "mongodb","Liquibase"]
+outils_ci_cd = ["Buddy", "Semaphore", "GoCD", "Drone.io", "TeamCity", "Wercker", "Codeship", "Travis CI", "CircleCI", "Bamboo","Jenkins"]
+outils_collab = ["VersionOne", "Phabricator", "Asana", "Pivotal Tracker", "Basecamp", "Visual Studio", "Trello", "Jira Software", "Mingle"]
+outils_version_control = ["Kallithea", "Beanstalk", "GitBucket", "Mercurial", "Gogs", "GitLab", "Bitbucket", "GitHub", "Subversion", "Git"]
+outils_test = ["SoapUI","Katalon Studio","ThreatModeler","Checkmarx","RSpec","SpecFlow","Pa11y","Browsersync","Serverspec","pytest","BlazeMeter","Load Impact","Galen Framework",
+"TestNG","QUnit","NUnit","FitNesse","Karma","Gatling","OWASP ZAP","Gauntlt","Mocha","Jmeter","Cucumber","JUnit","Jasmine","Selenium"]
+outils_bi_log = ["Nagios","Keen IO","Opsgenie","Beats","Moogsoft","PagerDuty","Rollbar","Raygun","Graphite","Grafana","APImetrics","Riemann","Atlas","Runscope","Dynatrace","Sensu","Pinpoint","Prometheus"
+,"Vizceral","Sentry","Google Analytics","Grok","Zipkin","Zabbix","Datadog","Kibana","Elasticsearch","Logstash","Airbrake","New Relic","App Dynamics","Vector","Splunk"]
+outils_cloud = ["Morpheus","Dokku","Engine Yard","OpenShift","Cloud Foundry","Flynn","Azure","OpenStack","Rackspace","Google Cloud Platform","Heroku","Amazon Web Services"]
 app = Flask(__name__)
 api = Api(app)  # type: Api
 
@@ -33,6 +42,8 @@ parser.add_argument('x', type=int, default=False, required=False)
 parser.add_argument('y', type=int, default=False, required=False)
 
 df = pd.read_csv("../../data/indeed.predicted.csv")
+locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+
 class Multiply(Resource):
     def get(self, x):
         result = x * x
@@ -49,7 +60,7 @@ def paris_vs_ville(tag):
 
 @app.route('/Paris_Vs_Ville/data')
 def paris_vs_ville_data():
-    locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+    #locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
     result = {}
     for item in locations:
         temp = df[df["localisation"] == item]
@@ -67,9 +78,81 @@ def salaire_langage_de_prog(tag):
 
 @app.route('/salaire_langage_de_prog/data')
 def salaire_langage_de_prog_data():
-    locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+    return  get_salaire_moyen_data(langage_de_progs)
+
+
+@app.route('/salaire_langage_de_prog/popularity')
+def salaire_langage_de_prog_popularity():
+    return get_popularite_data(langage_de_progs)
+
+
+@app.route('/salaire_outils/page/<string:tag>')
+def salaire_outils(tag):
+    return render_template("outils.html")
+
+
+@app.route('/salaire_outils/db/data')
+def salaire_outils_db_data():
+    return get_salaire_moyen_data(outils_db)
+
+@app.route('/salaire_outils/db/popularity')
+def salaire_outils_db_popularity():
+    return get_popularite_data(outils_db)
+
+
+@app.route('/salaire_outils/ci_cd/data')
+def salaire_outils_ci_cd_data():
+    return get_salaire_moyen_data(outils_ci_cd)
+
+@app.route('/salaire_outils/ci_cd/popularity')
+def salaire_outils_ci_cd_popularity():
+    return get_popularite_data(outils_ci_cd)
+
+@app.route('/salaire_outils/collab/data')
+def salaire_outils_collab_data():
+    return get_salaire_moyen_data(outils_collab)
+
+@app.route('/salaire_outils/collab/popularity')
+def salaire_outils_collab_popularity():
+    return get_popularite_data(outils_collab)
+
+
+@app.route('/salaire_outils/version_control/data')
+def salaire_outils_version_control_data():
+    return get_salaire_moyen_data(outils_version_control)
+
+@app.route('/salaire_outils/version_control/popularity')
+def salaire_outils_version_control_popularity():
+    return get_popularite_data(outils_version_control)
+
+@app.route('/salaire_outils/test/data')
+def salaire_outils_test_data():
+    return get_salaire_moyen_data(outils_test)
+
+@app.route('/salaire_outils/test/popularity')
+def salaire_outils_test_popularity():
+    return get_popularite_data(outils_test)
+
+@app.route('/salaire_outils/bi_log/data')
+def salaire_outils_bi_log_data():
+    return get_salaire_moyen_data(outils_bi_log)
+
+@app.route('/salaire_outils/bi_log/popularity')
+def salaire_outils_bi_log_popularity():
+    return get_popularite_data(outils_bi_log)
+
+
+
+@app.route('/salaire_outils/cloud/data')
+def salaire_outils_cloud_data():
+    return get_salaire_moyen_data(outils_cloud)
+@app.route('/salaire_outils/cloud/popularity')
+def salaire_outils_cloud_popularity():
+    return get_popularite_data(outils_cloud)
+
+def get_salaire_moyen_data(list):
     result = {}
-    for lg in langage_de_progs:
+    for lg in list:
         lg = lg.lower()
         if lg not in df.columns:
             continue
@@ -90,12 +173,9 @@ def salaire_langage_de_prog_data():
 
     return json.dumps(result)
 
-
-@app.route('/salaire_langage_de_prog/popularity')
-def salaire_langage_de_prog_popularity():
-    locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+def get_popularite_data(list):
     result = {}
-    for lg in langage_de_progs:
+    for lg in list:
         lg = lg.lower()
         if lg not in df.columns:
             continue
@@ -115,10 +195,6 @@ def salaire_langage_de_prog_popularity():
                             result[key_] = result[key_] + 1
     return json.dumps(result)
 
-
-@app.route('/salaire_outils/page/<string:tag>')
-def salaire_outils(tag):
-    return render_template("outils.html")
 
 
 api.add_resource(Multiply, '/multiply/<int:x>')
