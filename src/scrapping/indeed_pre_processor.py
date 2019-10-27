@@ -17,7 +17,6 @@ from unicodedata import normalize
 
 class IndeedPreProcessor:
     def __init__(self):
-        self.dao = IndeedMongodbDao()
         self.pages_path = r'C:\Users\Junior\Documents\Projects_Simplon\Projet_ML_gr3-master\scrapping\pages'
 
         self.pre_processing_file_name = "..\..\data\indeed.pre_processing.csv"
