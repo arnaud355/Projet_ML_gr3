@@ -29,7 +29,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-database"></i>
         </div>
@@ -41,7 +41,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="/">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
@@ -70,7 +70,7 @@
 
       <!-- Nav Item - Outils -->
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="/salaire_outils/page/toutes">
           <i class="fas fa-tools"></i>
           <span>Outils</span></a>
       </li>
@@ -193,11 +193,11 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_db_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_db_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
-                    <canvas id="myBarChart"></canvas>
+                    <canvas id="outils_salaire_db_BarChart"></canvas>
                   </div>
                   <hr>
                 </div>
@@ -206,12 +206,12 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="outils_db_popularite" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart"></canvas>
+                    <canvas id="outils_popularite_titre_PieChart"></canvas>
                   </div>
                 </div>
               </div>
@@ -304,11 +304,11 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="langage_de_prog_titre1" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_ci_cd_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
-                    <canvas id="myBarChart1"></canvas>
+                    <canvas id="outils_salaire_ci_cd_BarChart"></canvas>
                   </div>
                   <hr>
                 </div>
@@ -317,12 +317,12 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="langage_de_prog_popularity_titre1" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_ci_cd_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
-                    <canvas id="myPieChart1"></canvas>
+                    <canvas id="outils_ci_cd_PieChart"></canvas>
                   </div>
                 </div>
               </div>
@@ -356,7 +356,7 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_collab_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_collab_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -369,7 +369,7 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="outils_collab_popularite_BarChart" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_collab_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -408,7 +408,7 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_version_control_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_version_control_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -421,12 +421,12 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="outils_version_control_popularite" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_version_control_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-pie pt-4 pb-2">
-                    <canvas id="outils_version_control"></canvas>
+                    <canvas id="outils_version_control_chartpie"></canvas>
                   </div>
                 </div>
               </div>
@@ -460,7 +460,7 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_test_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_test_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -473,7 +473,7 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="outils_test_popularite" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_test_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -512,7 +512,7 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_bi_log_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_bi_log_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -564,7 +564,7 @@
               <!-- Bar Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 id="outils_salaire_cloud_data" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_salaire_cloud_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-bar">
@@ -577,7 +577,7 @@
               <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 id="outils_cloud_popularite" class="m-0 font-weight-bold text-primary"></h6>
+                  <h6 id="outils_cloud_popularite_titre" class="m-0 font-weight-bold text-primary"></h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">

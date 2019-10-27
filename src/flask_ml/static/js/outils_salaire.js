@@ -3,14 +3,14 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-function set_langage_de_prog_data(result)
+function set_outils_data_generic(result, title_id, chart_id)
 {
  var result_obj = JSON.parse(result);
  var labels = []
  var values = []
  param = window.location.pathname.split("/").pop()
 
-var langage_de_prog_titre = document.getElementById("langage_de_prog_titre");
+var langage_de_prog_titre = document.getElementById(title_id);
  if (param == "toutes")
  {
     langage_de_prog_titre.innerHTML = "Salaire - Toute la France";
@@ -31,7 +31,7 @@ var langage_de_prog_titre = document.getElementById("langage_de_prog_titre");
     }
  }
  // Bar Chart Example
-var ctx = document.getElementById("myBarChart");
+var ctx = document.getElementById(chart_id);
 var myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
@@ -113,17 +113,15 @@ var myBarChart = new Chart(ctx, {
   }
 });
 }
-get_file('http://127.0.0.1:5000/salaire_langage_de_prog/data', set_langage_de_prog_data)
 
-
-function set_lang_de_prog_popularity(result)
+function set_outils_popularite_generic(result, title_id, chart_id)
 {
   var result_obj = JSON.parse(result);
  var labels = []
  var values = []
  param = window.location.pathname.split("/").pop()
 
-var langage_de_prog_titre = document.getElementById("langage_de_prog_popularity_titre");
+var langage_de_prog_titre = document.getElementById(title_id);
  if (param == "toutes")
  {
     langage_de_prog_titre.innerHTML = "Popularité - Toute la France";
@@ -144,7 +142,7 @@ var langage_de_prog_titre = document.getElementById("langage_de_prog_popularity_
     }
  }
 
- var ctx = document.getElementById("myPieChart");
+ var ctx = document.getElementById(chart_id);
 var myPieChart = new Chart(ctx, {
   type: 'pie',
   data: {
@@ -177,5 +175,83 @@ var myPieChart = new Chart(ctx, {
 
 
 }
-get_file('http://127.0.0.1:5000/salaire_langage_de_prog/popularity', set_lang_de_prog_popularity)
 
+//db part
+function set_outils_data_db(result){
+  set_outils_data_generic(result, "outils_salaire_db_titre","outils_salaire_db_BarChart")
+}
+function set_outils_popularite_db(result){
+   set_outils_popularite_generic(result,"outils_popularite_titre", "outils_popularite_titre_PieChart")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/db/data', set_outils_data_db)
+
+get_file('http://127.0.0.1:5000/salaire_outils/db/popularity', set_outils_popularite_db)
+
+//ci_cd
+function set_outils_data_ci_cd(result){
+  set_outils_data_generic(result, "outils_salaire_ci_cd_titre","outils_salaire_ci_cd_BarChart")
+}
+function set_outils_popularite_ci_cd(result){
+   set_outils_popularite_generic(result,"outils_ci_cd_popularite_titre","outils_ci_cd_PieChart")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/ci_cd/data', set_outils_data_ci_cd)
+
+get_file('http://127.0.0.1:5000//salaire_outils/ci_cd/popularity', set_outils_popularite_ci_cd)
+
+
+//collab
+function set_outils_data_collab(result){
+  set_outils_data_generic(result, "outils_salaire_collab_titre", "outils_salaire_collab_BarChart")
+}
+function set_outils_popularite_collab(result){
+   set_outils_popularite_generic(result,"outils_collab_popularite_titre","outils_collab_PieChart")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/collab/data', set_outils_data_collab)
+
+get_file('http://127.0.0.1:5000/salaire_outils/collab/popularity', set_outils_popularite_collab)
+
+
+//version_control
+function set_outils_data_version_control(result){
+  set_outils_data_generic(result, "outils_salaire_version_control_titre", "outils_salaire_BarChart")
+}
+function set_outils_popularite_version_control(result){
+   set_outils_popularite_generic(result,"outils_version_control_popularite_titre", "outils_version_control_chartpie")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/version_control/data', set_outils_data_version_control)
+
+get_file('http://127.0.0.1:5000/salaire_outils/version_control/popularity', set_outils_popularite_version_control)
+
+
+//test
+function set_outils_data_test(result){
+  set_outils_data_generic(result, "outils_salaire_test_titre", "outils_test_BarChart")
+}
+function set_outils_popularite_test(result){
+   set_outils_popularite_generic(result,"outils_test_popularite_titre", "outils_test_chartpie")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/test/data', set_outils_data_test)
+
+get_file('http://127.0.0.1:5000/salaire_outils/test/popularity', set_outils_popularite_test)
+
+//bi_log
+function set_outils_data_bi_log(result){
+  set_outils_data_generic(result, "outils_salaire_bi_log_titre", "outils_bi_log_BarChart")
+}
+function set_outils_popularite_bi_log(result){
+   set_outils_popularite_generic(result,"outils_bi_log_popularite", "outils_bi_log_chartpie")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/bi_log/data', set_outils_data_bi_log)
+
+get_file('http://127.0.0.1:5000/salaire_outils/bi_log/popularity', set_outils_popularite_bi_log)
+
+//cloud
+function set_outils_data_cloud(result){
+  set_outils_data_generic(result, "outils_salaire_cloud_titre","outils_cloud_BarChart")
+}
+function set_outils_popularite_cloud(result){
+   set_outils_popularite_generic(result,"outils_cloud_popularite_titre", "outils_cloud_chartpie")
+}
+get_file('http://127.0.0.1:5000/salaire_outils/cloud/data', set_outils_data_cloud)
+
+get_file('http://127.0.0.1:5000/salaire_outils/cloud/popularity', set_outils_popularite_cloud)
