@@ -91,6 +91,32 @@ def salaire_langage_de_prog_data():
     return json.dumps(result)
 
 
+@app.route('/salaire_langage_de_prog/popularity')
+def salaire_langage_de_prog_popularity():
+    locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
+    result = {}
+    for lg in langage_de_progs:
+        lg = lg.lower()
+        if lg not in df.columns:
+            continue
+        for index, item in enumerate(df[lg]):
+            if item == 1:
+                key = lg + "_toutes"
+                if key not in result:
+                    result[key] = 1
+                else:
+                    result[key] = result[key] + 1
+                for loc in locations:
+                    if df["localisation"][index] == loc:
+                        key_ = lg + "_" + loc
+                        if key_ not in result:
+                            result[key_] = 1
+                        else:
+                            result[key_] = result[key_] + 1
+    return json.dumps(result)
+
+
+
 #Les graphes de base affichés en iframe
 @app.route('/dashboard/menu_graph_bar/')
 def menu_graph_bar():
