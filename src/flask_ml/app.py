@@ -41,6 +41,8 @@ parser = reqparse.RequestParser()
 parser.add_argument('x', type=int, default=False, required=False)
 parser.add_argument('y', type=int, default=False, required=False)
 
+#indeed.predicted est un fichier traité en amont pour avoir les prédictions, les lables
+#qui sont des bornes: prédictions à partir de cela
 df = pd.read_csv("../../data/indeed.predicted.csv")
 locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
 
