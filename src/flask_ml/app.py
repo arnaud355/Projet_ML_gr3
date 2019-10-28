@@ -46,14 +46,13 @@ parser.add_argument('y', type=int, default=False, required=False)
 df = pd.read_csv("../../data/indeed.predicted.csv")
 locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
 
-class Multiply(Resource):
-    def get(self, x):
-        result = x * x
-        return {'result': result}
-
-@app.route("/")
-def hello():
-    return render_template("index.html")
+#dashboard/data
+@app.route('/dashboard/data')
+def get_dashboard_data():
+    result = {}
+    result["nombre_annonces"] = len(df)
+    result["nombre_annonces"] = len(df)
+    return json.dumps(result)
 
 @app.route('/Paris_Vs_Ville/page/<string:tag>')
 def paris_vs_ville(tag):

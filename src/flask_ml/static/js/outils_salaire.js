@@ -3,14 +3,14 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-function set_outils_data_generic(result, title_id, chart_id)
+function set_outils_data_generic(result, title_id, chart_id,tools_count_id)
 {
  var result_obj = JSON.parse(result);
  var labels = []
  var values = []
  param = window.location.pathname.split("/").pop()
 
-var langage_de_prog_titre = document.getElementById(title_id);
+ var langage_de_prog_titre = document.getElementById(title_id);
  if (param == "toutes")
  {
     langage_de_prog_titre.innerHTML = "Salaire - Toute la France";
@@ -20,7 +20,7 @@ var langage_de_prog_titre = document.getElementById(title_id);
     langage_de_prog_titre.innerHTML = "Salaire - " + param;
  }
 
-
+ count = 0
  for (item in result_obj)
  {
     var key =  "_" + param
@@ -28,8 +28,13 @@ var langage_de_prog_titre = document.getElementById(title_id);
     {
         labels.push(item.replace(key,""))
         values.push(result_obj[item])
+        count = count + 1
     }
  }
+
+ var tools_count = document.getElementById(tools_count_id);
+ tools_count.innerHTML = count
+
  // Bar Chart Example
 var ctx = document.getElementById(chart_id);
 var myBarChart = new Chart(ctx, {
@@ -178,7 +183,7 @@ var myPieChart = new Chart(ctx, {
 
 //db part
 function set_outils_data_db(result){
-  set_outils_data_generic(result, "outils_salaire_db_titre","outils_salaire_db_BarChart")
+  set_outils_data_generic(result, "outils_salaire_db_titre","outils_salaire_db_BarChart","tools_db_count")
 }
 function set_outils_popularite_db(result){
    set_outils_popularite_generic(result,"outils_popularite_titre", "outils_popularite_titre_PieChart")
@@ -189,19 +194,19 @@ get_file('http://127.0.0.1:5000/salaire_outils/db/popularity', set_outils_popula
 
 //ci_cd
 function set_outils_data_ci_cd(result){
-  set_outils_data_generic(result, "outils_salaire_ci_cd_titre","outils_salaire_ci_cd_BarChart")
+  set_outils_data_generic(result, "outils_salaire_ci_cd_titre","outils_salaire_ci_cd_BarChart", "outils_ci_cd_id")
 }
 function set_outils_popularite_ci_cd(result){
    set_outils_popularite_generic(result,"outils_ci_cd_popularite_titre","outils_ci_cd_PieChart")
 }
 get_file('http://127.0.0.1:5000/salaire_outils/ci_cd/data', set_outils_data_ci_cd)
 
-get_file('http://127.0.0.1:5000//salaire_outils/ci_cd/popularity', set_outils_popularite_ci_cd)
+get_file('http://127.0.0.1:5000/salaire_outils/ci_cd/popularity', set_outils_popularite_ci_cd)
 
 
 //collab
 function set_outils_data_collab(result){
-  set_outils_data_generic(result, "outils_salaire_collab_titre", "outils_salaire_collab_BarChart")
+  set_outils_data_generic(result, "outils_salaire_collab_titre", "outils_salaire_collab_BarChart","outils_collab_id")
 }
 function set_outils_popularite_collab(result){
    set_outils_popularite_generic(result,"outils_collab_popularite_titre","outils_collab_PieChart")
@@ -213,7 +218,7 @@ get_file('http://127.0.0.1:5000/salaire_outils/collab/popularity', set_outils_po
 
 //version_control
 function set_outils_data_version_control(result){
-  set_outils_data_generic(result, "outils_salaire_version_control_titre", "outils_salaire_BarChart")
+  set_outils_data_generic(result, "outils_salaire_version_control_titre", "outils_salaire_BarChart", "outils_version_control_id")
 }
 function set_outils_popularite_version_control(result){
    set_outils_popularite_generic(result,"outils_version_control_popularite_titre", "outils_version_control_chartpie")
@@ -225,7 +230,7 @@ get_file('http://127.0.0.1:5000/salaire_outils/version_control/popularity', set_
 
 //test
 function set_outils_data_test(result){
-  set_outils_data_generic(result, "outils_salaire_test_titre", "outils_test_BarChart")
+  set_outils_data_generic(result, "outils_salaire_test_titre", "outils_test_BarChart","outils_test_id")
 }
 function set_outils_popularite_test(result){
    set_outils_popularite_generic(result,"outils_test_popularite_titre", "outils_test_chartpie")
@@ -236,7 +241,7 @@ get_file('http://127.0.0.1:5000/salaire_outils/test/popularity', set_outils_popu
 
 //bi_log
 function set_outils_data_bi_log(result){
-  set_outils_data_generic(result, "outils_salaire_bi_log_titre", "outils_bi_log_BarChart")
+  set_outils_data_generic(result, "outils_salaire_bi_log_titre", "outils_bi_log_BarChart","outils_bi_log_id")
 }
 function set_outils_popularite_bi_log(result){
    set_outils_popularite_generic(result,"outils_bi_log_popularite", "outils_bi_log_chartpie")
@@ -247,7 +252,7 @@ get_file('http://127.0.0.1:5000/salaire_outils/bi_log/popularity', set_outils_po
 
 //cloud
 function set_outils_data_cloud(result){
-  set_outils_data_generic(result, "outils_salaire_cloud_titre","outils_cloud_BarChart")
+  set_outils_data_generic(result, "outils_salaire_cloud_titre","outils_cloud_BarChart","outils_cloud_id")
 }
 function set_outils_popularite_cloud(result){
    set_outils_popularite_generic(result,"outils_cloud_popularite_titre", "outils_cloud_chartpie")
