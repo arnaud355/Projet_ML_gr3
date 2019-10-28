@@ -62,7 +62,6 @@ def paris_vs_ville(tag):
 
 @app.route('/Paris_Vs_Ville/data')
 def paris_vs_ville_data():
-    #locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
     result = {}
     for item in locations:
         temp = df[df["localisation"] == item]
@@ -197,10 +196,42 @@ def get_popularite_data(list):
                             result[key_] = result[key_] + 1
     return json.dumps(result)
 
+@app.route('/villes_vs_periph/page/<string:tag>')
+def ville_vs_periph(tag):
+    return render_template("VillesVsPeriph.html")
+
+def get_ville_vs_periph_data():
+    list_depts = {
+        "Paris": ["78", "77", "91", "60", "27", "76", "45", "61", "02", "75"],
+        "Lyon": ["71", "42", "38", "03", "39", "01", "63", "38", "73", "21", "69"],
+        "Toulouse": ["09", "32", "65", "64", "40", "82", "81", "11", "66", "46", "34"],
+        "Bordeaux": ["17", "16", "24", "87", "33"],
+        "Nantes": ["56", "35", "53", "85", "49", "22", "29", "29", "44"]
+    }
+
+    result = {}
+    for index, item in enumerate(locations):
+        temp = df[df["localisation"] == item]
+        for i, item2 in temp.iterrows():
+            address = item2["adresse"]
+            dept_selected = ""
+            for dept in list_depts[item]:
+                if dept in address:
+                    dept_selected = "(" + dept + ")"
+            if dept_selected == "":
+                continue
+
+            if item in address:
+                address = item
+            if item not in result:
+                result[item] = {}
+            if address not in result[item]:
+                result[item][address] = item2["salaire_moyen"]
+            else:
+                result[item][address] = (result[item][address] + item2["salaire_moyen"]) / 2
+    return json.dumps(result)
 
 
-api.add_resource(Multiply, '/multiply/<int:x>')
-#api.add_resource(Info, '/info/')
 
 if __name__ == "__main__":
     app.run(debug=True)
