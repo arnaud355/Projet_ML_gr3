@@ -18,7 +18,7 @@ Demande client : Obtenir des statistiques sur le marché de l'emploi en France c
 - Stockage des données dans une base de données
 - Exploration des données recueillies
 - Nettoyage des données (preprocessing) pour application des modèles de machine learning
-- Test de modèles de prédiction  
+- Test de modèles de machine learning (prédiction du salaire) 
 - Choix d'un modèle de prédiction en réponse à la problématique métier 
 - Visualisation des résultats via un dashboard (présentation des données et des analyses associées)
 - Restitution des résultats (technique et non technique) au client et à ses équipes
