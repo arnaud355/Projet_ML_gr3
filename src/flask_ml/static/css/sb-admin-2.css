@@ -69,6 +69,11 @@ body {
   background-color: #fff;
 }
 
+#chartdiv, #chartdiv2 {
+  width: 50%;
+  height: 400px;
+  float: left;
+}
 [tabindex="-1"]:focus {
   outline: 0 !important;
 }
