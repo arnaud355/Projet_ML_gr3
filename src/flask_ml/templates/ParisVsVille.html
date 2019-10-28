@@ -54,11 +54,18 @@
         Salaire
       </div>
 
-      <!-- Nav Item - Paris vs Villes -->
+    <!-- Nav Item - Paris vs Villes -->
       <li class="nav-item">
         <a class="nav-link" href="/Paris_Vs_Ville/page/moyen">
           <i class="fas fa-city"></i>
           <span>Paris vs Villes</span></a>
+      </li>
+
+      <!-- Nav Item - Villes vs periphérique -->
+      <li class="nav-item">
+        <a class="nav-link" href="/villes_vs_periph/page/Paris">
+          <i class="fas fa-city"></i>
+          <span>Villes vs periphériques</span></a>
       </li>
 
       <!-- Nav Item - Lang. programmation -->
@@ -74,8 +81,6 @@
           <i class="fas fa-tools"></i>
           <span>Outils</span></a>
       </li>
-
-
 
     </ul>
     <!-- End of Sidebar -->
@@ -285,6 +290,7 @@
   <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
 
   <!-- Page level custom scripts -->
+  <script src="{{ url_for('static', filename='js/utilities.js') }}"></script>
   <script src="{{ url_for('static', filename='js/bar-paris-ville.js') }}"></script>
 </body>
 

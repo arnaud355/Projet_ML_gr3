@@ -61,6 +61,13 @@
           <span>Paris vs Villes</span></a>
       </li>
 
+      <!-- Nav Item - Villes vs periphérique -->
+      <li class="nav-item">
+        <a class="nav-link" href="/villes_vs_periph/page/Paris">
+          <i class="fas fa-city"></i>
+          <span>Villes vs periphériques</span></a>
+      </li>
+
       <!-- Nav Item - Lang. programmation -->
       <li class="nav-item">
         <a class="nav-link" href="/salaire_langage_de_prog/page/toutes">
@@ -169,7 +176,7 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Répartition salariale par villes</h1>
+          <h1 class="h3 mb-2 text-gray-800">Villes vs periphériques</h1>
 
           <!-- Content Row -->
           <div class="row">
@@ -202,35 +209,28 @@
                 <!-- Card Body -->
                 <div class="card-body text-center">
                   <ul class="list-group">
-                    <li class="list-group-item"><a href="/salaire_outils/page/toutes"
-                                                   class="btn btn-secondary btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-city"></i>
-                                    </span>
-                                    <span class="text">Toutes les villes</span>
-                                  </a></li>
-                  <li class="list-group-item"><a href="/salaire_outils/page/Paris"
+                  <li class="list-group-item"><a href="/villes_vs_periph/page/Paris"
                                                  class="btn btn-secondary btn-icon-split">
                                     <span class="icon text-white-50">
                                       <i class="fas fa-city"></i>
                                     </span>
                                     <span class="text">Paris</span>
                                   </a></li>
-                  <li class="list-group-item"><a href="/salaire_outils/page/Lyon"
+                  <li class="list-group-item"><a href="/villes_vs_periph/page/Lyon"
                                                  class="btn btn-secondary btn-icon-split">
                                       <span class="icon text-white-50">
                                         <i class="fas fa-city"></i>
                                       </span>
                                       <span class="text">Lyon</span>
                                     </a></li>
-                  <li class="list-group-item"><a href="/salaire_outils/page/Toulouse"
+                  <li class="list-group-item"><a href="/villes_vs_periph/page/Toulouse"
                                                  class="btn btn-secondary btn-icon-split">
                                       <span class="icon text-white-50">
                                         <i class="fas fa-city"></i>
                                       </span>
                                       <span class="text">Toulouse</span>
                                     </a></li>
-                    <li class="list-group-item"> <a href="/salaire_outils/page/Nantes"
+                    <li class="list-group-item"> <a href="/villes_vs_periph/page/Nantes"
                                                     class="btn btn-secondary btn-icon-split">
                       <span class="icon text-white-50">
                         <i class="fas fa-city"></i>
@@ -238,7 +238,7 @@
                       <span class="text">Nantes</span>
                     </a>
                     </li>
-                     <li class="list-group-item"> <a href="/salaire_outils/page/Bordeaux" class="btn btn-secondary btn-icon-split">
+                     <li class="list-group-item"> <a href="/villes_vs_periph/page/Bordeaux" class="btn btn-secondary btn-icon-split">
                       <span class="icon text-white-50">
                         <i class="fas fa-city"></i>
                       </span>
@@ -314,7 +314,8 @@
   <script src="{{ url_for('static', filename='vendor/chart.js/Chart.min.js') }}"></script>
 
   <!-- Page level custom scripts -->
-  <script src="{{ url_for('static', filename='js/bar-paris-ville.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/utilities.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ville_vs_periph.js') }}"></script>
 </body>
 
 </html>

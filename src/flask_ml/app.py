@@ -200,6 +200,7 @@ def get_popularite_data(list):
 def ville_vs_periph(tag):
     return render_template("VillesVsPeriph.html")
 
+@app.route('/villes_vs_periph/data')
 def get_ville_vs_periph_data():
     list_depts = {
         "Paris": ["78", "77", "91", "60", "27", "76", "45", "61", "02", "75"],
@@ -214,12 +215,6 @@ def get_ville_vs_periph_data():
         temp = df[df["localisation"] == item]
         for i, item2 in temp.iterrows():
             address = item2["adresse"]
-            dept_selected = ""
-            for dept in list_depts[item]:
-                if dept in address:
-                    dept_selected = "(" + dept + ")"
-            if dept_selected == "":
-                continue
 
             if item in address:
                 address = item
