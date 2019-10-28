@@ -196,7 +196,7 @@ def grid_search_simple(classificateur,file_name, X, y):
                   }],
               "xgboost":[xgb.XGBClassifier(),{
                   'objective':['multi:softmax'],
-                  'num_class': 4,
+                  'num_class': [4],
                   "max_depth": [3, 5, 8],
                   "subsample": [0.5,0.8,1],
                   "learning_rate": [0.1, 0.3, 0.5],
@@ -257,7 +257,7 @@ def graph_result(fichier, n = 1500, variance = 0.1):
     plt.show()
 
 def get_classes(y):
-    kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=1000).fit(y.values.reshape(-1, 1))
+    kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=1000, n_init= 100).fit(y.values.reshape(-1, 1))
     y_class_orig = kmeans.labels_
     correspondance = list(pd.DataFrame(kmeans.cluster_centers_, columns=['center']).sort_values('center').index)
     y_dic = {correspondance[i]: i for i in range(len(kmeans.cluster_centers_))}
