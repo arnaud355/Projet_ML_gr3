@@ -46,6 +46,10 @@ parser.add_argument('y', type=int, default=False, required=False)
 df = pd.read_csv("../../data/indeed.predicted.csv")
 locations = np.unique(df[pd.notnull(df["localisation"])]["localisation"]).tolist()
 
+@app.route("/")
+def hello():
+    return render_template("index.html")
+
 #dashboard/data
 @app.route('/dashboard/data')
 def get_dashboard_data():
