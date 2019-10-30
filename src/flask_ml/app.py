@@ -219,6 +219,15 @@ def get_ville_vs_periph_data():
         for i, item2 in temp.iterrows():
             address = item2["adresse"]
 
+            to_continue = False
+            if item == "Toulouse":
+                exlude_list = ["Paris", "Marseille", "Lille", "France"]
+                for to_exclude in exlude_list:
+                    if to_exclude in address:
+                        to_continue = True
+            if to_continue == True:
+                continue
+
             if item in address:
                 address = item
             if item not in result:

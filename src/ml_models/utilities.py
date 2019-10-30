@@ -279,7 +279,7 @@ def get_classes(y):
         if index > 0:
             b = int(classe[index - 1] / k)
         classe_labels.append("[{0}K - {1}K]".format(b, e))
-        dic_min_max_mean[index] = [min(b, e)*100,statistics.mean([b, e])*k,max(b, e)*k]
+        dic_min_max_mean[index] = [min(b, e)*k,statistics.mean([b, e])*k,max(b, e)*k]
     classe_labels.append("[{0}K - {1}]".format(int(classe[len(classe) - 1] / k), "+"))
     dic_min_max_mean[len(classe)] = [int(classe[len(classe) - 1]), statistics.mean([int(classe[len(classe) - 1]), 200000]), 200000]
     dic_classe_labels = {i: classe_labels[i] for i in range(len(classe_labels))}
